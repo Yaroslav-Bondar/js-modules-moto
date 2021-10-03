@@ -1,0 +1,35 @@
+:root {
+    --color-blue: #3199dc;
+    --color-dark: #222222;
+    --color-semi-dark: dimgray;
+}
+*, 
+::after, 
+::before {
+    box-sizing: border-box;
+}
+
+body {
+    height: 2000px;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-dark);
+}
+* {
+    scrollbar-color: var(--color-blue) var(--color-semi-dark);
+    /* scrollbar-highlight-color: blueviolet; */
+    /* scrollbar-width: thin; */
+}
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+    /* background-color: brown rebeccapurple; */
+}
+::-webkit-scrollbar-track {
+    background-color: var(--color-semi-dark);
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-blue);
+    border-radius: 7px;
+    border: var(--color-semi-dark) solid 3px;
+}
