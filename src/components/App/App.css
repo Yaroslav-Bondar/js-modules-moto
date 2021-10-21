@@ -2,6 +2,11 @@
     --color-blue: #3199dc;
     --color-dark: #222222;
     --color-semi-dark: dimgray;
+    --color-light: #f8f9fa;
+
+    --spacing-small: 10px;
+    --spacing-medium: 20px;
+    --spacing-large: 30px;
 }
 *, 
 ::after, 
@@ -10,10 +15,12 @@
 }
 
 body {
-    height: 2000px;
     margin: 0;
     padding: 0;
     background-color: var(--color-dark);
+    font-size: 16px;
+    line-height: 1.7;
+    font-family: Arial, Helvetica, sans-serif;    
 }
 * {
     scrollbar-color: var(--color-blue) var(--color-semi-dark);

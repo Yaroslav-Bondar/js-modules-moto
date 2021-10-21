@@ -1,7 +1,7 @@
 import axios from "axios";
 import {API_KEY} from '../constants/api'
 
-export class GetDataApi {
+class GetDataApi {
     async getData(url) {
         try {
             const response = await axios.get(url, {
