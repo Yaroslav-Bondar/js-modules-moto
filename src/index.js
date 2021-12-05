@@ -1,4 +1,4 @@
-import 'regenerator-runtime/runtime'
+import 'regenerator-runtime/runtime'  // to support asynchronous functions
 // import {API_URL, URL_COMICS} from './constants/api'
 // import {getDataApi} from './utils/getDataApi'
 import App from './components/App'

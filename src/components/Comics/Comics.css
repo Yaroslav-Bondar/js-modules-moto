@@ -1,4 +1,4 @@
-.comics__container {
+.user__container {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -7,7 +7,7 @@
     padding: 0 var(--spacing-medium);
     gap: var(--spacing-large);
 }
-.comics__item {
+.user__item {
     display: flex;
     flex-flow: column;
     justify-content: space-between;
@@ -17,14 +17,14 @@
     transition: transform .5s;
     cursor: pointer;
 }
-.comics__item:hover {
+.user__item:hover {
     transform: rotateZ(-5deg) scale(0.92);
     filter: saturate(1.4);
 }
-.comics__name {
+.user__name {
     margin: auto;
     padding: var(--spacing-small);
     text-align: center;
 }
-.comics__img {
+.user__img {
 }
