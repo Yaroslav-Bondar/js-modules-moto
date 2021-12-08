@@ -19,8 +19,18 @@ class GetDataApi {
                     url
                 // 'https://api.github.com/search/users?q=language:javascript+location:ukraine+type:user&sort=followers&order=desc&page=1&per_page=10'
             )
-            console.log(response.data.items);
-            return response.data.items;
+            // console.log(response.data.items);
+            if(response.data.items) {
+                // console.log(response);
+                // console.log(response.data.items);
+                return response.data.items;
+            }
+            else if(response.data) {
+                // console.log(response);
+
+                // console.log(response.data);
+                return response.data;
+            }
             // console.log(response.data.items[0].name);
             // const fullName = await axios.get[response.data.items[0].name]
             // return response.data.data.results
