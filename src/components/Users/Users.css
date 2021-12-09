@@ -1,4 +1,4 @@
-.user__container {
+.users__container {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -7,7 +7,7 @@
     padding: 0 var(--spacing-medium);
     gap: var(--spacing-large);
 }
-.user__item {
+.users__item {
     display: flex;
     flex-flow: column;
     justify-content: space-between;
@@ -17,14 +17,14 @@
     transition: transform .5s;
     cursor: pointer;
 }
-.user__item:hover {
+.users__item:hover {
     transform: rotateZ(-5deg) scale(0.92);
     filter: saturate(1.4);
 }
-.user__name {
+.users__name {
     margin: auto;
     padding: var(--spacing-small);
     text-align: center;
 }
-/* .user__img {
+/* .users__img {
 } */
