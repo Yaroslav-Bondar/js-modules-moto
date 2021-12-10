@@ -1,0 +1,51 @@
+.user__container {
+    position: relative;
+    display: grid;
+    grid-template-areas: 'header header'
+                          'avatar user';
+    grid-template-columns: .4fr .6fr;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: burlywood;
+}
+.user__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background-color: blueviolet;
+}
+/* .user__container::before {
+} */
+.user__title {
+    grid-area: header;
+}
+.user__avatar {
+    grid-area: avatar;
+    /* float: left; */
+    display: flex;
+    flex-flow: column;
+    background-color: cadetblue;
+}
+.user__avatar-img {
+
+}
+.user__avatar-field {
+
+}
+.user__avatar-name {
+
+}
+.user__info {
+    grid-area: user;
+}
+.user__field {
+
+}
+.user__field-name {
+
+}
+.user__field-value {
+
+}
