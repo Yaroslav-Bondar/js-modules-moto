@@ -1,13 +1,13 @@
 import { ROOT_MODAL } from '../../constants/root';
 import {getDataApi} from '../../utils/getDataApi';
 import classes from './User.css';
+import {API_URL, URL_USERS} from '../../constants/api';
 // import axios from 'axios';
 // const data = getDataApi.getData('https://api.github.com/users/mourner');
 function User() {
 
 }
-User.prototype.render = async function(url) {
-    console.log(url);
+User.prototype.render = async function(login) {
     let htmlContent, fieldHtml = '';
     let minorKeys, sortedKeys, keys, fieldName;
     const topKeys = ['name', 'login', 'id', 'location', 'email', 'twitter_username',
@@ -17,7 +17,8 @@ User.prototype.render = async function(url) {
         twitter_username: 'twitter',
         html_url: 'gitHub',
     };
-    const data = await getDataApi.getData(url);
+    const userUrl = API_URL + '/' + URL_USERS + '/' + login;  
+    const data = await getDataApi.getData(userUrl);
     // checking for an empty field and replace it
     const correctData = Object.fromEntries(Object.entries(data).map(item => 
         item[1] === '' ||  item[1] === null ? [item[0], 'data not specified'] : item

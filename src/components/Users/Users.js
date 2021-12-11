@@ -4,6 +4,7 @@ import {getDataApi} from '../../utils/getDataApi';
 import classes from './Users.css';
 import {ROOT_INDEX} from '../../constants/root';
 import User from '../User';
+import Repo from '../Repo';
 
 class Users {
     async render() {
@@ -17,11 +18,11 @@ class Users {
             // console.log(id, login, ava);
             // if the path contain an image    
             // if(!path.includes(IMG_NOT_AVAILABLE)) {
-                const userUrl = API_URL + '/' + URL_USERS + '/' + login;  
+                // const userUrl = API_URL + '/' + URL_USERS + '/' + login;  
                 // const imgSrc = path + '/' + IMG_STANDART_XLARGE + '.' + extension
                 // const imgSrc = ava;
                 htmlContent += `
-                    <li class="${classes.users__item}" data-user-url='${userUrl}'>
+                    <li class="${classes.users__item}" data-user-login='${login}'>
                         <div class="${classes.users__name}">${login}</div>
                         <div class="${classes.users__id}">${id}</div>
                         <img class="${classes.users__img}" src="${avatarUrl}" alt="user_avatar"/>
@@ -39,9 +40,10 @@ class Users {
     eventListener() {
         document.querySelectorAll(`.${classes.users__item}`).forEach(el => {
             el.addEventListener('click', () => {
-                // console.log(el.dataset.userUrl);
+                // console.log(el.dataset.userLogin);
                 // console.log(el.getAttribute('data-user-url'));
-                User.render(el.getAttribute('data-user-url'));
+                User.render(el.getAttribute('data-user-login'));
+                Repo.render(el.getAttribute('data-user-login'));
             })
         })
     }

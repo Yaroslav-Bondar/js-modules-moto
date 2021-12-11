@@ -19,7 +19,7 @@ class GetDataApi {
                     url
                 // 'https://api.github.com/search/users?q=language:javascript+location:ukraine+type:user&sort=followers&order=desc&page=1&per_page=10'
             )
-            // console.log(response.data.items);
+            // console.log(response);
             if(response.data.items) {
                 // console.log(response);
                 // console.log(response.data.items);
@@ -37,6 +37,7 @@ class GetDataApi {
         }
         catch(err) {
             console.log(err.message)
+            return err
             return false
         }
     }
