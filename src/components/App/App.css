@@ -40,3 +40,25 @@ body {
     border-radius: 7px;
     border: var(--color-semi-dark) solid 3px;
 }
+:global(.wrapper__modal) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(3, 3, 3, 0.5);
+}
+:global(.container__modal) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 1000px;
+    width: 80%;
+    height: 600px;
+    margin: auto;
+    padding: var(--spacing-large);
+    background-color: burlywood;
+    overflow: auto;
+}

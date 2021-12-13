@@ -1,6 +1,6 @@
 // import {API_URL, URL_USERS, URL_OPTIONS} from '../../constants/api'
 import {API_URL, URL_ACTION, URL_USERS, URL_OPTIONS} from '../../constants/api';
-import {getDataApi} from '../../utils/getDataApi';
+import {getDataApi} from '../../utils';
 import classes from './Users.css';
 import {ROOT_INDEX} from '../../constants/root';
 import User from '../User';

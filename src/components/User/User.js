@@ -1,5 +1,8 @@
 import { ROOT_MODAL } from '../../constants/root';
-import {getDataApi} from '../../utils/getDataApi';
+import {getDataApi} from '../../utils';
+// import {correctData} from '../../utils';
+// import {sortData} from '../../utils';
+import dataWorker from '../../utils/'
 import classes from './User.css';
 import {API_URL, URL_USERS} from '../../constants/api';
 // import axios from 'axios';
@@ -8,8 +11,8 @@ function User() {
 
 }
 User.prototype.render = async function(login) {
-    let htmlContent, fieldHtml = '';
-    let minorKeys, sortedKeys, keys, fieldName;
+    let htmlContent, fieldName, fieldHtml = '';
+    // let minorKeys, sortedKeys, keys, ;
     const topKeys = ['name', 'login', 'id', 'location', 'email', 'twitter_username',
                     'html_url', 'blog', 'company', 'created_at', 'updated_at'];
     const notEnteredKey = ['avatar_url', 'bio', 'gravatar_id'];
@@ -20,27 +23,22 @@ User.prototype.render = async function(login) {
     const userUrl = API_URL + '/' + URL_USERS + '/' + login;  
     const data = await getDataApi.getData(userUrl);
     // checking for an empty field and replace it
-    const correctData = Object.fromEntries(Object.entries(data).map(item => 
-        item[1] === '' ||  item[1] === null ? [item[0], 'data not specified'] : item
-    ).filter(([, value]) => !/^https:\/\/api/.test(value)));
-    
-    keys = Object.keys(correctData);
-    minorKeys = keys.filter(key => !topKeys.includes(key)).sort();
-    sortedKeys = topKeys.concat(minorKeys).filter(key => !notEnteredKey.includes(key));
-    sortedKeys.forEach(key => {
-        fieldName = keysName[key] ? keysName[key] : key;
-        fieldHtml += `
-            <li class="${classes.user__field}">
-                <span class="${classes['user__field-name']}">${fieldName}:</span>
-                <span class="${classes['user__field-name']}">${correctData[key]}</span>
-            </li>`    
+    const dataCorrected = dataWorker.correctData(data);
+    // keys = Object.keys(dataCorrected);
+    // minorKeys = keys.filter(key => !topKeys.includes(key)).sort();
+    // sortedKeys = topKeys.concat(minorKeys).filter(key => !notEnteredKey.includes(key));
+    dataWorker.sortData(dataCorrected, topKeys, notEnteredKey).forEach(key => {
+        // dataWorker.renderFields(dataCorrected, key, keysName, );
+        // fieldName = keysName[key] ? keysName[key] : key;
+        fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName);
+            
     });
     htmlContent += `
         <h2 class="${classes.user__title}">Hero</h2>
         <div class="${classes.user__avatar}">
-            <img src="${correctData.avatar_url}" alt="avatar" class="${classes['user__avatar-img']}">
+            <img src="${dataCorrected.avatar_url}" alt="avatar" class="${classes['user__avatar-img']}">
             <span class="${classes['user__avatar-field']}">bio:</span>
-            <span class="${classes['user__avatar-bio']}">${correctData.bio}</span>
+            <span class="${classes['user__avatar-bio']}">${dataCorrected.bio}</span>
         </div>
         <ul class="${classes.user__info}">
             ${fieldHtml}
@@ -50,8 +48,12 @@ User.prototype.render = async function(login) {
         </button>
     `;
     const htmlWrapper = `
-        <div class="${classes.user__container}">
-            ${htmlContent}
+        <div class="wrapper__modal">
+            <div class="container__modal">
+                <div class="${classes.user__container}">
+                    ${htmlContent}
+                </div>
+            </div>
         </div>
     `;
     ROOT_MODAL.innerHTML = htmlWrapper;
