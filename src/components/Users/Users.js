@@ -40,12 +40,11 @@ class Users {
     eventListener() {
         document.querySelectorAll(`.${classes.users__item}`).forEach(el => {
             el.addEventListener('click', () => {
-                // console.log(el.dataset.userLogin);
-                // console.log(el.getAttribute('data-user-url'));
                 User.render(el.getAttribute('data-user-login'));
                 Repo.render(el.getAttribute('data-user-login'));
-            })
-        })
+                // Repo.showMore();
+            });
+        });
     }
-}
+};
 export default new Users();

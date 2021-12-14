@@ -1,0 +1,18 @@
+.repo__info {
+    color: brown;
+}
+.repo__fields {
+    
+}
+.repo__field {
+    
+}
+.repo__field:nth-child(n+6) {
+    display: none;
+}
+.repo__key {
+
+}
+.repo__value {
+
+}

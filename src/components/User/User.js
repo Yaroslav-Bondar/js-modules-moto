@@ -11,8 +11,7 @@ function User() {
 
 }
 User.prototype.render = async function(login) {
-    let htmlContent, fieldName, fieldHtml = '';
-    // let minorKeys, sortedKeys, keys, ;
+    let htmlContent, fieldHtml = '';
     const topKeys = ['name', 'login', 'id', 'location', 'email', 'twitter_username',
                     'html_url', 'blog', 'company', 'created_at', 'updated_at'];
     const notEnteredKey = ['avatar_url', 'bio', 'gravatar_id'];
@@ -24,12 +23,8 @@ User.prototype.render = async function(login) {
     const data = await getDataApi.getData(userUrl);
     // checking for an empty field and replace it
     const dataCorrected = dataWorker.correctData(data);
-    // keys = Object.keys(dataCorrected);
-    // minorKeys = keys.filter(key => !topKeys.includes(key)).sort();
-    // sortedKeys = topKeys.concat(minorKeys).filter(key => !notEnteredKey.includes(key));
+
     dataWorker.sortData(dataCorrected, topKeys, notEnteredKey).forEach(key => {
-        // dataWorker.renderFields(dataCorrected, key, keysName, );
-        // fieldName = keysName[key] ? keysName[key] : key;
         fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName);
             
     });
