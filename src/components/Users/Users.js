@@ -1,4 +1,3 @@
-// import {API_URL, URL_USERS, URL_OPTIONS} from '../../constants/api'
 import {API_URL, URL_ACTION, URL_USERS, URL_OPTIONS} from '../../constants/api';
 import {getDataApi} from '../../utils';
 import classes from './Users.css';
@@ -8,41 +7,30 @@ import Repo from '../Repo';
 
 class Users {
     async render() {
-        // let data = await getDataApi.getData(API_URL + URL_COMICS)
-        // let url = API_URL + '/' + URL_ACTION + '/' + URL_USERS + URL_OPTIONS;
         let data = await getDataApi.getData(API_URL + '/' + URL_ACTION + '/' + URL_USERS + URL_OPTIONS);    
-        // console.log('data is ', typeof data);
-        let htmlContent = ''
+        let htmlContent = '';
 
         data.forEach(({id, login, avatar_url : avatarUrl}) => {
-            // console.log(id, login, ava);
-            // if the path contain an image    
-            // if(!path.includes(IMG_NOT_AVAILABLE)) {
-                // const userUrl = API_URL + '/' + URL_USERS + '/' + login;  
-                // const imgSrc = path + '/' + IMG_STANDART_XLARGE + '.' + extension
-                // const imgSrc = ava;
-                htmlContent += `
-                    <li class="${classes.users__item}" data-user-login='${login}'>
-                        <div class="${classes.users__name}">${login}</div>
-                        <div class="${classes.users__id}">${id}</div>
-                        <img class="${classes.users__img}" src="${avatarUrl}" alt="user_avatar"/>
-                    </li>
-                `
-            // }
-        })
+            htmlContent += `
+                <li class="${classes.users__item}" data-user-login='${login}'>
+                    <div class="${classes.users__name}">${login}</div>
+                    <div class="${classes.users__id}">${id}</div>
+                    <img class="${classes.users__img}" src="${avatarUrl}" alt="user_avatar"/>
+                </li>
+            `
+        });
         const htmlWrapper = `
             <ul class="${classes.users__container}">
                 ${htmlContent}
             </ul>
         `
-        ROOT_INDEX.innerHTML = htmlWrapper
+        ROOT_INDEX.innerHTML = htmlWrapper;
     }
     eventListener() {
         document.querySelectorAll(`.${classes.users__item}`).forEach(el => {
             el.addEventListener('click', () => {
                 User.render(el.getAttribute('data-user-login'));
                 Repo.render(el.getAttribute('data-user-login'));
-                // Repo.showMore();
             });
         });
     }

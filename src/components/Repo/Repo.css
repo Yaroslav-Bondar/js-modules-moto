@@ -16,3 +16,8 @@
 .repo__value {
 
 }
+.repo__show-more {
+}
+.repo__show-less {
+    display: none;
+}

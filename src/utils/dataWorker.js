@@ -4,7 +4,7 @@ class dataWorker {
             item[1] === '' ||  item[1] === null ? [item[0], 'data not specified'] : item
         ).filter(([, value]) => !/^https:\/\/api/.test(value)));
     
-    sortData = (data, topKeys, notEnteredKey) => {
+    sortKey = (data, topKeys, notEnteredKey) => {
         let keys = Object.keys(data);
         let minorKeys = keys.filter(key => !topKeys.includes(key)).sort();
         return topKeys.concat(minorKeys).filter(key => !notEnteredKey.includes(key));

@@ -1,16 +1,13 @@
 import {getDataApi} from '../../utils';
-// import {correctData} from '../../utils';
-// import {sortData} from '../../utils';
 import classes from './Repo.css';
 import dataWorker from '../../utils';
 import {API_URL, URL_REPO, URL_ACTION, URL_REPO_OPTIONS} from '../../constants/api';
-// import {ROOT_MODAL} from '../../constants/root';
 class Repo {
     async render(login) {
         const repoUrlTemplate = API_URL + '/' + URL_ACTION + '/' + URL_REPO + URL_REPO_OPTIONS;
         let fieldHtml = '', reposHtml = '';
-        const showMoreHtml = `<button class="show__more">Show more</button>
-                                <button class="show__less">Show less</button>`;
+        const buttonsHtml = `<button class="show__more ${classes['repo__show-more']}">Show more</button>
+                                <button class="show__less ${classes['repo__show-less']}">Show less</button>`;
 
         const topKeys = ['name', 'full_name', 'html_url', 'clone_url', 'git_url', 'stargazers_count',
                         'language', 'id', 'description', 'created_at', 'updated_at', 'pushed_at'];
@@ -21,13 +18,11 @@ class Repo {
         
         data.forEach(repo => {
             const dataCorrected = dataWorker.correctData(repo);
-            // console.log('-------');
-            dataWorker.sortData(dataCorrected, topKeys, notEnteredKey).forEach(key => {
-                // console.log(key);
+            dataWorker.sortKey(dataCorrected, topKeys, notEnteredKey).forEach(key => {
                 fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName, classes.repo__field,
                              classes.repo__key, classes.repo__value);
             });
-            reposHtml += `<ul class="${classes.repo__fields}">${fieldHtml + showMoreHtml}</ul>`;
+            reposHtml += `<ul class="${classes.repo__fields}">${fieldHtml + buttonsHtml}</ul>`;
             fieldHtml = '';
         });
         const htmlWrapper = `
@@ -40,29 +35,46 @@ class Repo {
             `;
         document.querySelector('.container__modal').insertAdjacentHTML('beforeend', htmlWrapper);
         this.showMore();
+        this.showLess();
     }
     showMore() {
-        document.querySelectorAll('.show__more').forEach(el => {
-            el.addEventListener('click', ()=> {
-                const fields = el.parentNode.childNodes;
-                // console.log(getComputedStyle(el.parentNode.childNodes[4]).display);
-                for(let i = 0; i < 5; i++) {
-                    for (let i = 0; i < fields.length; i++) {
-                        if(getComputedStyle(fields[i]).display != 'none') {
-                            
-                        }
-                    }
-                    // el.parentNode.childNodes
+        document.querySelector(`.${classes.repo__info}`).addEventListener('click', (e) => {
+            if(!e.target.classList.contains(`${classes['repo__show-more']}`)) return;
+            const parent = e.target.parentNode;
+            const fields = parent.querySelectorAll('li');
+            const buttonMore = parent.querySelector(`.${classes['repo__show-more']}`);
+            const buttonLess = parent.querySelector(`.${classes['repo__show-less']}`);
+            buttonLess.style.display = 'inline-block';
+            let counter = 0;
+            for(let i = 0; i < fields.length; i++) {
+                if(getComputedStyle(fields[i]).display == 'none') {
+                    fields[i].style.display = 'block';
+                    counter++;
                 }
-                // console.log(getComputedStyle(el.parentNode.childNodes[10]).display);
+                if(i == fields.length - 1) buttonMore.style.display = 'none';
+                if(counter == 5) return;
+            }
+        });
+    }
+    showLess() {
+        document.querySelector(`.${classes.repo__info}`).addEventListener('click', (e) => {
+            if(!e.target.classList.contains(`${classes['repo__show-less']}`)) return;
+            const parent = e.target.parentNode;
+            const fields = parent.querySelectorAll('li');
+            const buttonMore = parent.querySelector(`.${classes['repo__show-more']}`);
+            const buttonLess = parent.querySelector(`.${classes['repo__show-less']}`);
+            let counter = 0;
+            
+            if(buttonMore.style.display = 'none') buttonMore.style.display = 'inline-block';
 
-
-                // console.log(e.target.parentNode.childNodes);
-
-
-                // if(e.target.className == 'show__more')
-                //     console.log('hello');
-            })
+            for (let i = fields.length - 1; getComputedStyle(fields[i]).display !== 'list-item'; i--) {
+                if(fields[i].style.display == 'block') {
+                    fields[i].style.display = 'none';
+                    counter++;
+                }
+                if(getComputedStyle(fields[i - 1]).display == 'list-item') buttonLess.style.display = 'none';
+                if(counter == 5) return;
+            }
         });
     }
 }

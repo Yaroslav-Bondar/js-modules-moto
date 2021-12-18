@@ -1,12 +1,9 @@
 import { ROOT_MODAL } from '../../constants/root';
 import {getDataApi} from '../../utils';
-// import {correctData} from '../../utils';
-// import {sortData} from '../../utils';
 import dataWorker from '../../utils/'
 import classes from './User.css';
 import {API_URL, URL_USERS} from '../../constants/api';
-// import axios from 'axios';
-// const data = getDataApi.getData('https://api.github.com/users/mourner');
+
 function User() {
 
 }
@@ -21,10 +18,9 @@ User.prototype.render = async function(login) {
     };
     const userUrl = API_URL + '/' + URL_USERS + '/' + login;  
     const data = await getDataApi.getData(userUrl);
-    // checking for an empty field and replace it
     const dataCorrected = dataWorker.correctData(data);
 
-    dataWorker.sortData(dataCorrected, topKeys, notEnteredKey).forEach(key => {
+    dataWorker.sortKey(dataCorrected, topKeys, notEnteredKey).forEach(key => {
         fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName);
             
     });
