@@ -31,8 +31,7 @@ class Repo {
                 <ul class="${classes.repo__info}">
                     ${reposHtml};
                 </ul>
-            </div>
-            `;
+            </div>`;
         document.querySelector('.container__modal').insertAdjacentHTML('beforeend', htmlWrapper);
         this.showMore();
         this.showLess();
@@ -44,7 +43,7 @@ class Repo {
             const fields = parent.querySelectorAll('li');
             const buttonMore = parent.querySelector(`.${classes['repo__show-more']}`);
             const buttonLess = parent.querySelector(`.${classes['repo__show-less']}`);
-            buttonLess.style.display = 'inline-block';
+            if(buttonLess.style.display = 'none') buttonLess.style.display = 'inline-block';
             let counter = 0;
             for(let i = 0; i < fields.length; i++) {
                 if(getComputedStyle(fields[i]).display == 'none') {

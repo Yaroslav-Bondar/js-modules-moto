@@ -1,8 +1,17 @@
-import { ROOT_MODAL } from '../../constants/root';
+// import {ROOT_MODAL, BODY} from '../../constants/root';
 import {getDataApi} from '../../utils';
-import dataWorker from '../../utils/'
+import dataWorker from '../../utils/';
 import classes from './User.css';
 import {API_URL, URL_USERS} from '../../constants/api';
+// console.log(BODY.style.overflow);
+export let a = {name: 'j'};
+try {
+    throw new Error('my Error');
+}
+catch(e) {
+    console.info(e.name, e.message);
+    console.info(e.stack);
+}
 
 function User() {
 
@@ -22,7 +31,6 @@ User.prototype.render = async function(login) {
 
     dataWorker.sortKey(dataCorrected, topKeys, notEnteredKey).forEach(key => {
         fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName);
-            
     });
     htmlContent += `
         <h2 class="${classes.user__title}">Hero</h2>
@@ -34,19 +42,19 @@ User.prototype.render = async function(login) {
         <ul class="${classes.user__info}">
             ${fieldHtml}
         </ul>
-        <button onclick='modal.innerHTML = ""' class="${classes.user__close}">
+        <button onclick="modal.innerHTML = '';body.style.overflow = ''" class = "${classes['user__close']}">
             [x]
         </button>
     `;
     const htmlWrapper = `
-        <div class="wrapper__modal">
-            <div class="container__modal">
-                <div class="${classes.user__container}">
-                    ${htmlContent}
-                </div>
-            </div>
-        </div>
-    `;
-    ROOT_MODAL.innerHTML = htmlWrapper;
+        <div class="${classes.user__container}">
+            ${htmlContent}
+        </div>`;
+    document.querySelector('.container__modal').innerHTML += htmlWrapper;
+    // <div class="wrapper__modal">
+    //     <div class="container__modal">
+    // </div>
+    // </div>
+    // ROOT_MODAL.innerHTML = htmlWrapper;
 }
 export default new User();
