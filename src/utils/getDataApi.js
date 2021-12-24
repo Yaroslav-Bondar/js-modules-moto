@@ -14,13 +14,9 @@ class GetDataApi {
             }
         }
         catch(err) {
-            console.log(err.message)
-            console.log(typeof err);
-            // Error.render(err);
-            return false;
-            return err
+            console.log(err.message);
+            return err;
         }
     }
 }
-
 export const getDataApi = new GetDataApi();

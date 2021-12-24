@@ -1,4 +1,3 @@
-// import { remove } from 'lodash';
 import classes from './Spinner.css';
 class Spinner {
     handleClear(parent) {

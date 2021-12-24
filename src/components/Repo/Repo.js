@@ -2,9 +2,15 @@ import {getDataApi} from '../../utils';
 import classes from './Repo.css';
 import dataWorker from '../../utils';
 import {API_URL, URL_REPO, URL_ACTION, URL_REPO_OPTIONS} from '../../constants/api';
+import {Err} from '../Error';
 class Repo {
     async render(login) {
-        const repoUrlTemplate = API_URL + '/' + URL_ACTION + '/' + URL_REPO + URL_REPO_OPTIONS;
+        const repoUrlTemplate = API_URL + '/' + URL_ACTION +  'd' + '/' + URL_REPO + URL_REPO_OPTIONS;
+        const repoUrl = repoUrlTemplate.replace(/user_name/, login);    
+        const data = await getDataApi.getData(repoUrl);
+        data instanceof Error ? Err.render(data, repo) : this.renderRepo(data);
+    }
+    renderRepo(data) {
         let fieldHtml = '', reposHtml = '';
         const buttonsHtml = `<button class="show__more ${classes['repo__show-more']}">Show more</button>
                                 <button class="show__less ${classes['repo__show-less']}">Show less</button>`;
@@ -13,9 +19,6 @@ class Repo {
                         'language', 'id', 'description', 'created_at', 'updated_at', 'pushed_at'];
         const notEnteredKey = [];
         const keysName = {};
-        const repoUrl = repoUrlTemplate.replace(/user_name/, login);    
-        const data = await getDataApi.getData(repoUrl);
-        
         data.forEach(repo => {
             const dataCorrected = dataWorker.correctData(repo);
             dataWorker.sortKey(dataCorrected, topKeys, notEnteredKey).forEach(key => {
@@ -25,14 +28,11 @@ class Repo {
             reposHtml += `<ul class="${classes.repo__fields}">${fieldHtml + buttonsHtml}</ul>`;
             fieldHtml = '';
         });
-        const htmlWrapper = `
-            <div class="${classes.repo__container}">
-                <h2 class="${classes.repo__title}">User repository</h2>
-                <ul class="${classes.repo__info}">
-                    ${reposHtml};
-                </ul>
-            </div>`;
-        document.querySelector('.container__modal').insertAdjacentHTML('beforeend', htmlWrapper);
+        repo.innerHTML = `
+            <h2 class="${classes.repo__title}">User repository</h2>
+            <ul class="${classes.repo__info}">
+                ${reposHtml};
+            </ul>`; 
         this.showMore();
         this.showLess();
     }

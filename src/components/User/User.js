@@ -1,23 +1,14 @@
-// import {ROOT_MODAL, BODY} from '../../constants/root';
 import {getDataApi} from '../../utils';
 import dataWorker from '../../utils/';
 import classes from './User.css';
 import {API_URL, URL_USERS} from '../../constants/api';
-// console.log(BODY.style.overflow);
-export let a = {name: 'j'};
-try {
-    throw new Error('my Error');
-}
-catch(e) {
-    console.info(e.name, e.message);
-    console.info(e.stack);
-}
+import {Err} from '../Error';
 
 function User() {
 
 }
-User.prototype.render = async function(login) {
-    let htmlContent, fieldHtml = '';
+User.prototype.userRender = function(data) {
+    let fieldHtml = '';
     const topKeys = ['name', 'login', 'id', 'location', 'email', 'twitter_username',
                     'html_url', 'blog', 'company', 'created_at', 'updated_at'];
     const notEnteredKey = ['avatar_url', 'bio', 'gravatar_id'];
@@ -25,14 +16,13 @@ User.prototype.render = async function(login) {
         twitter_username: 'twitter',
         html_url: 'gitHub',
     };
-    const userUrl = API_URL + '/' + URL_USERS + '/' + login;  
-    const data = await getDataApi.getData(userUrl);
     const dataCorrected = dataWorker.correctData(data);
 
     dataWorker.sortKey(dataCorrected, topKeys, notEnteredKey).forEach(key => {
         fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName);
     });
-    htmlContent += `
+    user.classList.add(`${classes.user__container}`);
+    user.innerHTML = `
         <h2 class="${classes.user__title}">Hero</h2>
         <div class="${classes.user__avatar}">
             <img src="${dataCorrected.avatar_url}" alt="avatar" class="${classes['user__avatar-img']}">
@@ -41,20 +31,11 @@ User.prototype.render = async function(login) {
         </div>
         <ul class="${classes.user__info}">
             ${fieldHtml}
-        </ul>
-        <button onclick="modal.innerHTML = '';body.style.overflow = ''" class = "${classes['user__close']}">
-            [x]
-        </button>
-    `;
-    const htmlWrapper = `
-        <div class="${classes.user__container}">
-            ${htmlContent}
-        </div>`;
-    document.querySelector('.container__modal').innerHTML += htmlWrapper;
-    // <div class="wrapper__modal">
-    //     <div class="container__modal">
-    // </div>
-    // </div>
-    // ROOT_MODAL.innerHTML = htmlWrapper;
+        </ul>`;
+}
+User.prototype.render = async function(login) {
+    const userUrl = API_URL + '/' + URL_USERS + '/' + login;  
+    const data = await getDataApi.getData(userUrl);
+    data instanceof Error ? Err.render(data, user, 'error__miniscreen', 'error user data') : this.userRender(data);
 }
 export default new User();
