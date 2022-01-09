@@ -1,7 +1,7 @@
 import {getDataApi} from '../../utils';
 import dataWorker from '../../utils/';
 import classes from './User.css';
-import {API_URL, URL_USERS} from '../../constants/api';
+import {API_URL, API_URL_USERS} from '../../constants/api';
 import {Err} from '../Error';
 
 function User() {
@@ -34,7 +34,7 @@ User.prototype.userRender = function(data) {
         </ul>`;
 }
 User.prototype.render = async function(login) {
-    const userUrl = API_URL + '/' + URL_USERS + '/' + login;  
+    const userUrl = API_URL + '/' + API_URL_USERS + '/' + login;  
     const data = await getDataApi.getData(userUrl);
     data instanceof Error ? Err.render(data, user, 'error__miniscreen', 'error user data') : this.userRender(data);
 }

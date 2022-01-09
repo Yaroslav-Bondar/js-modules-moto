@@ -1,4 +1,4 @@
-.users__container {
+/* .users__container {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -6,6 +6,9 @@
     margin: 0 auto;
     padding: 0 var(--spacing-medium);
     gap: var(--spacing-large);
+} */
+.users__list {
+
 }
 .users__item {
     display: flex;

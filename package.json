@@ -10,6 +10,7 @@
     "postcss-modules": "^3.2.0"
   },
   "dependencies": {
-    "axios": "^0.21.4"
+    "axios": "^0.21.4",
+    "tuicss": "^2.1.1"
   }
 }

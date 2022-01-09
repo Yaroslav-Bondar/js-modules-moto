@@ -1,11 +1,11 @@
 import {getDataApi} from '../../utils';
 import classes from './Repo.css';
 import dataWorker from '../../utils';
-import {API_URL, URL_REPO, URL_ACTION, URL_REPO_OPTIONS} from '../../constants/api';
+import {API_URL, API_URL_REPO, API_URL_SEARCH, API_URL_REPO_OPTIONS} from '../../constants/api';
 import {Err} from '../Error';
 class Repo {
     async render(login) {
-        const repoUrlTemplate = API_URL + '/' + URL_ACTION +  'd' + '/' + URL_REPO + URL_REPO_OPTIONS;
+        const repoUrlTemplate = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_REPO + API_URL_REPO_OPTIONS;
         const repoUrl = repoUrlTemplate.replace(/user_name/, login);    
         const data = await getDataApi.getData(repoUrl);
         data instanceof Error ? Err.render(data, repo) : this.renderRepo(data);

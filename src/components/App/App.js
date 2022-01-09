@@ -3,8 +3,8 @@ import './App.css';
 
 class App {
     async render() {
-        await Users.render()
+        await Users.render();
     }
-    eventListenerUsers = Users.eventListener;
+    // eventListenerUsers = Users.eventListener; // *
 }
-export default new App()
+export default new App();

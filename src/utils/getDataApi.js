@@ -6,10 +6,11 @@ class GetDataApi {
     async getData(url) {
         try {
             const response = await axios.get(url)
-            if(response.data.items) {
+            console.log(response);
+            if(response.data.items) {        // response for Users, Repo
                 return response.data.items;
             }
-            else if(response.data) {
+            else if(response.data) {         // response for User
                 return response.data;
             }
         }
