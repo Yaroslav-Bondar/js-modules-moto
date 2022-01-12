@@ -7,13 +7,13 @@ import Repo from '../Repo';
 import Spinner from '../Spinner';
 import {Err} from '../Error';
 import 'tuicss';
-// console.log(tuicss);
 class Users {
-    // , target
-    // usersList = ROOT_INDEX.querySelector('.users__list');
-    renderUsers(data) {   // possible use Promise, for discrete rendering
+    currentPageData = 1;
+    isLoadMore = false;
+    usersList;
+    renderUsers(data, isLoading) {   // possible use Promise, for discrete rendering
         let htmlUsers = '';
-        data.forEach(({id, login, avatar_url : avatarUrl}) => {
+        data.items.forEach(({id, login, avatar_url : avatarUrl}) => {
             htmlUsers += `
             <li class="${classes.users__item}" data-user-login='${login}'>
                 <div class="${classes.users__name}">${login}</div>
@@ -21,52 +21,67 @@ class Users {
                 <img class="${classes.users__img}" src="${avatarUrl}" alt="user_avatar"/>
             </li>`;
         });
-        const usersList = ROOT_INDEX.querySelector('.users__list');
-        if(usersList) {
-            usersList.insertAdjacentHTML('beforeend', htmlUsers)
-            // usersList.innerHTML += htmlUsers;
-            console.log('usersList ', usersList);
+        // if click the load more button
+        if(this.usersList && isLoading) {  // * possible without this.usersList 
+            this.usersList.insertAdjacentHTML('beforeend', htmlUsers);
         }
-        else {
+        // if click the load form button
+        if(this.usersList && !isLoading) {  // * possible without this.usersList
+            this.usersList.innerHTML = '';
+            this.usersList.insertAdjacentHTML('beforeend', htmlUsers);
+        }
+        // if rendered for the first time
+        if(!this.usersList) {   // * update users__amount
             let html =`
-            <div class= "users__container">
+            <div class="users__container">
+                <div class="users__amount">${data.total_count}</div>  
                 <ul class="users__list">
                     ${htmlUsers}
                 </ul>
+                <button type="button" class="users__load-more">Load more</button>
             </div>`;
             ROOT_INDEX.insertAdjacentHTML('beforeend', html);
-            console.log('usersList e', usersList);
-            // ROOT_INDEX.innerHTML += 
+            this.usersList = ROOT_INDEX.querySelector('.users__list');
         }
-        // target.innerHTML = htmlUsers;
      }
-    async render(language, location) {
-        // get data from form
+    async render(formData) {
+        if(formData) {
+            this.currentPageData = 1;
+            this.isLoadMore = false;
+        }
+        else {
+            this.currentPageData++;
+            this.isLoadMore = true;
+        }
         let usersUrlTemplate = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_USERS;
         let requestOption = API_URL_USERS_OPTIONS;
-        // const usersList = ROOT_INDEX.querySelector('.users__list');  // *
-        if(language) {
+        // if(language) {
             requestOption = requestOption.replace(REGEXP_LANGUAGE, (...match) => {
-                return match[1] + language;
+                return match[1] + formData.language;
             });
-        }
-        if(location) {
+        // }
+        // if(location) {
             requestOption = requestOption.replace(REGEXP_LOCATION, (...match) => {
-                return match[1] + location;
+                return match[1] + formData.country;
             });
-        }
-        console.log(requestOption);
+        // }
+        // console.log(requestOption);
         usersUrlTemplate += requestOption;
-        console.log(usersUrlTemplate);
+        // console.log(usersUrlTemplate);
         let data = await getDataApi.getData(usersUrlTemplate);
-        console.log(data);
+        // console.log(data);
         if (data instanceof Error) {
             Err.render(data, ROOT_INDEX, 'error__fullscreen', '');
         }
         else {
-            this.renderUsers(data);
+            this.renderUsers(data, this.isLoadMore);
             this.eventListener();
         }
+    }
+    eventListenerLoadMore() {
+        document.querySelector('.users__load-more').addEventListener(() => {
+            this.render();
+        });
     }
     eventListener() {
         document.querySelectorAll(`.${classes.users__item}`).forEach(el => {

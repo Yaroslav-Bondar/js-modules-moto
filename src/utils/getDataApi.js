@@ -7,12 +7,14 @@ class GetDataApi {
         try {
             const response = await axios.get(url)
             console.log(response);
-            if(response.data.items) {        // response for Users, Repo
-                return response.data.items;
-            }
-            else if(response.data) {         // response for User
-                return response.data;
-            }
+            // if(response.data.items) {        // response for Users, Repo
+            //     // return response.data.items;
+            //     return response.data.items;
+            // }
+            // else if(response.data) {         // response for User
+            //     return response.data;
+            // }
+            return response.data;
         }
         catch(err) {
             console.log(err.message);

@@ -1,1 +1,5 @@
 spinner correct render
+
+ask:
+fetch vs axios
+creating object instaces when the import launch

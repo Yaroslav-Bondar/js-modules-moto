@@ -11,7 +11,7 @@ import Form from './components/Form';
     // Spinner.render(ROOT_INDEX);
     // Spinner.render(document.querySelector('.users__container'), 'spinner__users');
     Spinner.render(ROOT_INDEX, 'spinner__users');
-    await App.render();
+    await App.render(Form.getDataForm());
     // Spinner.handleClear(document.querySelector('.users__container'), 'spinner__users');
     Spinner.handleClear();
     // setTime

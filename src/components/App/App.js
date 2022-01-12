@@ -2,8 +2,8 @@ import Users from '../Users';
 import './App.css';
 
 class App {
-    async render() {
-        await Users.render();
+    async render(dataForm) {
+        await Users.render(dataForm);
     }
     // eventListenerUsers = Users.eventListener; // *
 }
