@@ -1,4 +1,5 @@
-import {API_URL, API_URL_SEARCH, API_URL_USERS, API_URL_USERS_OPTIONS, REGEXP_LANGUAGE, REGEXP_LOCATION} from '../../constants/api';
+import {API_URL, API_URL_SEARCH, API_URL_USERS, API_URL_USERS_OPTIONS, 
+    API_URL_LANGUAGE_REGEXP, API_URL_LOCATION_REGEXP, API_URL_PAGE_REGEXP} from '../../constants/api';
 import {getDataApi} from '../../utils';
 import classes from './Users.css';
 import {ROOT_INDEX, ROOT_MODAL, BODY} from '../../constants/root';
@@ -8,10 +9,13 @@ import Spinner from '../Spinner';
 import {Err} from '../Error';
 import 'tuicss';
 class Users {
-    currentPageData = 1;
+    currentDataPage = 1;
     isLoadMore = false;
     usersList;
+    urlUsers = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_USERS; // * ? one variable
+    currentRequestOptions = API_URL_USERS_OPTIONS;
     renderUsers(data, isLoading) {   // possible use Promise, for discrete rendering
+        // console.log(data.length);
         let htmlUsers = '';
         data.items.forEach(({id, login, avatar_url : avatarUrl}) => {
             htmlUsers += `
@@ -42,34 +46,32 @@ class Users {
             </div>`;
             ROOT_INDEX.insertAdjacentHTML('beforeend', html);
             this.usersList = ROOT_INDEX.querySelector('.users__list');
+            this.eventListenerLoadMore();
         }
      }
     async render(formData) {
         if(formData) {
-            this.currentPageData = 1;
+            this.currentDataPage = 1;
             this.isLoadMore = false;
-        }
-        else {
-            this.currentPageData++;
-            this.isLoadMore = true;
-        }
-        let usersUrlTemplate = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_USERS;
-        let requestOption = API_URL_USERS_OPTIONS;
-        // if(language) {
-            requestOption = requestOption.replace(REGEXP_LANGUAGE, (...match) => {
+            this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_LANGUAGE_REGEXP, (...match) => {
                 return match[1] + formData.language;
             });
-        // }
-        // if(location) {
-            requestOption = requestOption.replace(REGEXP_LOCATION, (...match) => {
+            this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_LOCATION_REGEXP, (...match) => {
                 return match[1] + formData.country;
             });
-        // }
-        // console.log(requestOption);
-        usersUrlTemplate += requestOption;
-        // console.log(usersUrlTemplate);
-        let data = await getDataApi.getData(usersUrlTemplate);
-        // console.log(data);
+            this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_PAGE_REGEXP, (...match) => {
+                return match[1] + this.currentDataPage;
+            });
+        }
+        else {
+            this.currentDataPage++;
+            this.isLoadMore = true;
+            this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_PAGE_REGEXP, (...match) => {
+                return match[1] + this.currentDataPage;
+            });
+        }
+        console.log(this.urlUsers + this.currentRequestOptions);
+        let data = await getDataApi.getData(this.urlUsers + this.currentRequestOptions);
         if (data instanceof Error) {
             Err.render(data, ROOT_INDEX, 'error__fullscreen', '');
         }
@@ -79,7 +81,8 @@ class Users {
         }
     }
     eventListenerLoadMore() {
-        document.querySelector('.users__load-more').addEventListener(() => {
+        document.querySelector('.users__load-more').addEventListener('click', () => {
+            console.log('eventListenerLoadMore()');
             this.render();
         });
     }

@@ -41,7 +41,7 @@ class Repo {
             if(!e.target.classList.contains(`${classes['repo__show-more']}`)) return;
             const parent = e.target.parentNode;
             const fields = parent.querySelectorAll('li');
-            const buttonMore = parent.querySelector(`.${classes['repo__show-more']}`);
+            const buttonMore = parent.querySelector(`.${classes['repo__show-more']}`); // * double declare
             const buttonLess = parent.querySelector(`.${classes['repo__show-less']}`);
             if(buttonLess.style.display = 'none') buttonLess.style.display = 'inline-block';
             let counter = 0;
@@ -60,7 +60,7 @@ class Repo {
             if(!e.target.classList.contains(`${classes['repo__show-less']}`)) return;
             const parent = e.target.parentNode;
             const fields = parent.querySelectorAll('li');
-            const buttonMore = parent.querySelector(`.${classes['repo__show-more']}`);
+            const buttonMore = parent.querySelector(`.${classes['repo__show-more']}`); // * double declare
             const buttonLess = parent.querySelector(`.${classes['repo__show-less']}`);
             let counter = 0;
             
