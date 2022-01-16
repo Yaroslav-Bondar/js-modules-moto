@@ -1,9 +1,14 @@
 export const API_URL = 'https://api.github.com';
 export const API_URL_SEARCH = 'search';
 export const API_URL_USERS = 'users';
-export const API_URL_USERS_OPTIONS = '?q=language:javascript+location:ukraine+type:user&sort=followers&order=desc&page=1&per_page=10';
+export const API_URL_USERS_OPTIONS = '?q=location:ukraine+language:javascript+type:user&sort=followers&order=desc&page=1&per_page=10';
 
 export const API_URL_REPO = 'repositories';
+export const API_URL_LANGUAGE_QUALIFIER = 'language';
+export const API_URL_USER_QUALIFIER = 'user';
+export const API_URL_COLON_SEPARATOR = ':';
+export const API_URL_PLUS_SEPARATOR = '+';
+
 export const API_URL_REPO_OPTIONS = '?q=user:user_name+language:javascript&stars:>=1&sort=stars&order=desc&page=1&per_page=10';
 
 export const API_URL_LANGUAGE_REGEXP = /\b(language:)(\w+)\b/g;

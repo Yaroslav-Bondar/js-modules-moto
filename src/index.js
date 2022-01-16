@@ -7,16 +7,11 @@ import Form from './components/Form';
 
 (async () => {
     Form.render();
-    Form.eventListener();
-    // Spinner.render(ROOT_INDEX);
-    // Spinner.render(document.querySelector('.users__container'), 'spinner__users');
+    Form.init();
     Spinner.render(ROOT_INDEX, 'spinner__users');
     await App.render(Form.getDataForm());
-    // Spinner.handleClear(document.querySelector('.users__container'), 'spinner__users');
+    // App.init();
     Spinner.handleClear();
-    // setTime
-    // Users.eventListener();
 
     console.log("ROOT");
-    // App.eventListenerUsers();
 })()

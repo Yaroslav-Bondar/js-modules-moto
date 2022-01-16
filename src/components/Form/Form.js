@@ -2,25 +2,25 @@ import {ROOT_INDEX} from '../../constants/root';
 import Users from '../Users';
 import Spinner from '../Spinner';
 class Form {
-    // formUsers = document.forms.users;
+    #formUsers;
     render() {
         // <div class="container__root tui-bg-blue-black tui-border-double tui-fieldset orange-168"></div>
         let htmlContent = `
-            <form name="users">
-                <label for="ZIP">ZIP : </label>
-                <input type="text" id="ZIP">
+            <form name="users" role="search">
                 <fieldset>
                     <legend>required user data</legend>
-                    <label for="country">Country : </label>
-                    <select id="country" name="country" size='1'>
-                        <option value="switzerland">Switzerland</option>
-                        <option value="france">France</option>
-                        <option value="ukraine" selected label="my country" disabled>Ukraine</option>
-                        <option value="germany">Germany</option>
-                        <option value="nl">The Netherlands</option>
-                    </select>
+
+                    <label for="login">login</label>
+                    <input type="search" id="login" name="login" placeholder="Search user by login..."
+                    aria-label="Search user by login">
+
+                    <label for="location">From this location</label>
+                    <input type="text" id="location" name="location" placeholder="Ukraine Kyiv Odessa"
+                    aria-label="Search user by location">
+
                     <label for="language">Language : </label>
                     <select id="language" name="language">
+                        <option value="">none</option>
                         <option value="javascript" selected>Java Script</option>
                         <option value="C">c</option>
                         <option value="ruby">Ruby</option>
@@ -31,36 +31,34 @@ class Form {
                 </form>`;
                 // <input type="submit" value="submit" onclick='alert(4)'>
                 // onclick='alert(4)'
+                // <label for="country">Country:</label>
+                // <select id="country" name="country" size='1'>
+                //     <option value="">none</option>    
+                //     <option value="switzerland">Switzerland</option>
+                //     <option value="france">France</option>
+                //     <option value="ukraine" selected label="my country" disabled>Ukraine</option>
+                //     <option value="germany">Germany</option>
+                //     <option value="nl">The Netherlands</option>
+                // </select>
         ROOT_INDEX.insertAdjacentHTML('afterbegin', htmlContent);
     }
-    eventListener() {
-        // console.log('I am eventlistener');
-        const formUsers = document.forms.users; // * double define
-        // console.log(formUsers);
-        // console.log(formUsers.elements.btn2);
-        formUsers.addEventListener('submit', async (e) => {
+    init() {
+        this.#formUsers = document.forms.users;
+        this.#eventListener();
+    }
+    #eventListener() {
+        this.#formUsers.addEventListener('submit', async (e) => {
             e.preventDefault();
-            // console.log('event ', e);
-            // alert(e);
-            // const formUsersElements = 
-            // const selectCountryValue = formUsers.elements.country.value;
-            // const selectLanguageValue = formUsers.elements.language.value;
-            // const dataForm = {
-            //     country: formUsers.elements.country.value,
-            //     language: formUsers.elements.language.value,
-            // }
-            // const usersContainer = ROOT_INDEX.querySelector('.users__container');
             Spinner.render(ROOT_INDEX, 'spinner__users');
-            // await Users.render(selectLanguageValue, selectCountryValue);
             await Users.render(this.getDataForm());
             Spinner.handleClear();
         });
     }
     getDataForm() {
-        const formUsers = document.forms.users; // * double define
         return {
-            country: formUsers.elements.country.value,   // * use for 
-            language: formUsers.elements.language.value,
+            country: this.#formUsers.elements.location.value,   // * use for while
+            language: this.#formUsers.elements.language.value,
+            login: this.#formUsers.elements.login.value,
         }
     }
 }

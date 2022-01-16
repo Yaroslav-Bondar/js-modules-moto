@@ -9,7 +9,7 @@ import Spinner from '../Spinner';
 import {Err} from '../Error';
 import 'tuicss';
 class Users {
-    currentDataPage = 1;
+    currentDataPage = 1; // * validation 
     isLoadMore = false;
     usersList;
     urlUsers = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_USERS; // * ? one variable
@@ -45,13 +45,16 @@ class Users {
                 <button type="button" class="users__load-more">Load more</button>
             </div>`;
             ROOT_INDEX.insertAdjacentHTML('beforeend', html);
-            this.usersList = ROOT_INDEX.querySelector('.users__list');
-            this.eventListenerLoadMore();
+            this.init();
         }
-     }
+    }
+    init() {
+        this.usersList = ROOT_INDEX.querySelector('.users__list');
+        this.eventListenerLoadMore();
+    }
     async render(formData) {
         if(formData) {
-            this.currentDataPage = 1;
+            this.currentDataPage = 1; 
             this.isLoadMore = false;
             this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_LANGUAGE_REGEXP, (...match) => {
                 return match[1] + formData.language;
@@ -82,7 +85,7 @@ class Users {
     }
     eventListenerLoadMore() {
         document.querySelector('.users__load-more').addEventListener('click', () => {
-            console.log('eventListenerLoadMore()');
+            // console.log('eventListenerLoadMore()');
             this.render();
         });
     }
@@ -100,10 +103,10 @@ class Users {
                             [x]
                         </button>
                     </div>`;
-                Spinner.render(document.querySelector('.container__modal'));
+                Spinner.render(document.querySelector('.container__modal')); // *
                 await User.render(el.getAttribute('data-user-login'));
                 await Repo.render(el.getAttribute('data-user-login'));
-                Spinner.handleClear(document.querySelector('.container__modal'));
+                Spinner.handleClear(document.querySelector('.container__modal'));  // *
                 BODY.style.overflow = 'hidden';
             });
         });
