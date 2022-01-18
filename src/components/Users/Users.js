@@ -1,5 +1,6 @@
 import {API_URL, API_URL_SEARCH, API_URL_USERS, API_URL_USERS_OPTIONS, 
     API_URL_LANGUAGE_REGEXP, API_URL_LOCATION_REGEXP, API_URL_PAGE_REGEXP} from '../../constants/api';
+import * as apiSign from '../../constants/api/apiSign';
 import {getDataApi} from '../../utils';
 import classes from './Users.css';
 import {ROOT_INDEX, ROOT_MODAL, BODY} from '../../constants/root';
@@ -11,9 +12,10 @@ import 'tuicss';
 class Users {
     currentDataPage = 1; // * validation 
     isLoadMore = false;
-    usersList;
+    usersList;  // * Does it need here?
     urlUsers = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_USERS; // * ? one variable
-    currentRequestOptions = API_URL_USERS_OPTIONS;
+    // currentRequestOptions = API_URL_USERS_OPTIONS;
+    currentRequestOptions = '?q=';
     renderUsers(data, isLoading) {   // possible use Promise, for discrete rendering
         // console.log(data.length);
         let htmlUsers = '';
@@ -56,15 +58,25 @@ class Users {
         if(formData) {
             this.currentDataPage = 1; 
             this.isLoadMore = false;
-            this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_LANGUAGE_REGEXP, (...match) => {
-                return match[1] + formData.language;
-            });
-            this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_LOCATION_REGEXP, (...match) => {
-                return match[1] + formData.country;
-            });
-            this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_PAGE_REGEXP, (...match) => {
-                return match[1] + this.currentDataPage;
-            });
+            // get request part of url
+            for (const key in formData.qualifier) {
+                if(formData.qualifier[key]) {
+                    this.currentRequestOptions += key + apiSign.API_URL_COLON_SIGN + formData.qualifier[key] + apiSign.API_URL_PLUS_SIGN;      
+                }
+            }
+            this.currentRequestOptions = this.currentRequestOptions.slice(0, this.currentRequestOptions.length - 1);
+            // get request part of url
+            console.log(this.currentRequestOptions);
+
+            // this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_LANGUAGE_REGEXP, (...match) => {
+            //     return match[1] + formData.language;
+            // });
+            // this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_LOCATION_REGEXP, (...match) => {
+            //     return match[1] + formData.country;
+            // });
+            // this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_PAGE_REGEXP, (...match) => {
+            //     return match[1] + this.currentDataPage;
+            // });
         }
         else {
             this.currentDataPage++;

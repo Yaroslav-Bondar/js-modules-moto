@@ -1,8 +1,11 @@
 import {ROOT_INDEX} from '../../constants/root';
 import Users from '../Users';
 import Spinner from '../Spinner';
+import * as qualifier from '../../constants/api/apiUrlQualifier';
+// console.log(qualifier);
 class Form {
     #formUsers;
+    #qualifierValues = Object.values(qualifier);
     render() {
         // <div class="container__root tui-bg-blue-black tui-border-double tui-fieldset orange-168"></div>
         let htmlContent = `
@@ -10,16 +13,19 @@ class Form {
                 <fieldset>
                     <legend>required user data</legend>
 
-                    <label for="login">login</label>
-                    <input type="search" id="login" name="login" placeholder="Search user by login..."
+                    <label for="name">login</label>
+                    <input type="text" id="name" name="${qualifier.API_URL_USER_QUALIFIER}" placeholder="Search user by login..."
                     aria-label="Search user by login">
 
+                    <input type="radio" id="" name"" value="">
+                    <label for=""></label>
+
                     <label for="location">From this location</label>
-                    <input type="text" id="location" name="location" placeholder="Ukraine Kyiv Odessa"
+                    <input type="text" id="location" name="${qualifier.API_URL_LOCATION_QUALIFIER}" placeholder="Ukraine Kyiv Odessa"
                     aria-label="Search user by location">
 
                     <label for="language">Language : </label>
-                    <select id="language" name="language">
+                    <select id="language" name="${qualifier.API_URL_LANGUAGE_QUALIFIER}">
                         <option value="">none</option>
                         <option value="javascript" selected>Java Script</option>
                         <option value="C">c</option>
@@ -28,7 +34,7 @@ class Form {
                     </select>
                 </fieldset>
                 <button value="submit">submit</button>
-                </form>`;
+            </form>`;
                 // <input type="submit" value="submit" onclick='alert(4)'>
                 // onclick='alert(4)'
                 // <label for="country">Country:</label>
@@ -55,11 +61,23 @@ class Form {
         });
     }
     getDataForm() {
-        return {
-            country: this.#formUsers.elements.location.value,   // * use for while
-            language: this.#formUsers.elements.language.value,
-            login: this.#formUsers.elements.login.value,
+        console.log(this.#formUsers);
+        let formData = {
+            qualifier: {},
+            parameter:{},
         }
+        for(let i = 0; i < this.#formUsers.elements.length; i++) { // * check for epmty field
+            if(this.#qualifierValues.includes(this.#formUsers.elements[i].name)) {
+                formData.qualifier[this.#formUsers.elements[i].name] = this.#formUsers.elements[i].value; 
+            }
+        }
+        console.log(formData);
+        // return {
+        //     country: this.#formUsers.elements.location.value,   // * use for while
+        //     language: this.#formUsers.elements.language.value,
+        //     name: this.#formUsers.elements.name.value,
+        // }
+        return formData;
     }
 }
 export default new Form(); 
