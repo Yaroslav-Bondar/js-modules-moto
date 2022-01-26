@@ -1,6 +1,6 @@
 import {API_URL, API_URL_SEARCH, API_URL_USERS, API_URL_USERS_OPTIONS, 
     API_URL_LANGUAGE_REGEXP, API_URL_LOCATION_REGEXP, API_URL_PAGE_REGEXP} from '../../constants/api';
-import * as apiSign from '../../constants/api/apiSign';
+import * as apiUrlSign from '../../constants/api/apiUrlSign';
 import {getDataApi} from '../../utils';
 import classes from './Users.css';
 import {ROOT_INDEX, ROOT_MODAL, BODY} from '../../constants/root';
@@ -8,6 +8,11 @@ import User from '../User';
 import Repo from '../Repo';
 import Spinner from '../Spinner';
 import {Err} from '../Error';
+import * as apiUrlElementName from '../../constants/api/apiUrlElementName';
+import * as apiUrlIdentifier from '../../constants/api/apiUrlIdentifier';
+import * as apiUrlRegExp from '../../constants/api/apiUrlRegExp';
+
+
 import 'tuicss';
 class Users {
     currentDataPage = 1; // * validation 
@@ -55,16 +60,42 @@ class Users {
         this.eventListenerLoadMore();
     }
     async render(formData) {
+        let qualifiers = '', parameters = '' + '&stars:>=1&sort=stars&order=desc&page=1&per_page=10';
         if(formData) {
             this.currentDataPage = 1; 
             this.isLoadMore = false;
+            this.currentRequestOptions = '?q='; 
             // get request part of url
-            for (const key in formData.qualifier) {
-                if(formData.qualifier[key]) {
-                    this.currentRequestOptions += key + apiSign.API_URL_COLON_SIGN + formData.qualifier[key] + apiSign.API_URL_PLUS_SIGN;      
+            for (const key in formData) {
+                // get data from group (fieldset html tag)
+                if(key.includes(apiUrlIdentifier.API_URL_GROUP_IDENTIFIER)) {
+                    formData[key].forEach(item => {
+                        // rule for single qualifiers
+                        if(item[0].includes(apiUrlIdentifier.API_URL_SINGLE_QUALIFIER_IDENTIFIER) && item[1]) {
+                            qualifiers += item[0].replace(apiUrlRegExp.API_URL_SINGLE_QUALIFIER_REGEXP, '') + item[1] + '+';
+                        }
+                        // rule for double qualifiers
+                        if(item[0].includes(apiUrlIdentifier.API_URL_DOUBLE_QUALIFIER_IDENTIFIER) && item[1]) {
+                            qualifiers += item[1] + ' ' + item[0].replace(apiUrlRegExp.API_URL_DOUBLE_QUALIFIER_REGEXP, '') + '+'; 
+                        }
+                        // rule for boolean operators
+                        if(item[0].includes(apiUrlIdentifier.API_URL_BOOLEAN_OPERATOR_IDENTIFIER) && item[1]) {
+                            qualifiers += item[1] + '+'; 
+                        }
+                        // console.log(item[0], item[1]);
+                    });
                 }
+                // if the field for type user name/login/fullname is not empty
+
+                // if(key == apiUrlElementName.NAME_SEARCH_VALUE && formData.qualifier[key]) {
+                    
+                //     this.currentRequestOptions += key + apiUrlSign.API_URL_COLON_SIGN + formData.qualifier[key] + apiUrlSign.API_URL_PLUS_SIGN;      
+                // }
             }
-            this.currentRequestOptions = this.currentRequestOptions.slice(0, this.currentRequestOptions.length - 1);
+            console.log(qualifiers);
+            qualifiers = qualifiers.slice(0, qualifiers.length - 1);
+            this.currentRequestOptions += qualifiers + parameters; 
+            // this.currentRequestOptions = this.currentRequestOptions.slice(0, this.currentRequestOptions.length - 1);
             // get request part of url
             console.log(this.currentRequestOptions);
 

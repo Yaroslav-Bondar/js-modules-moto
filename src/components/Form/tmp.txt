@@ -1,0 +1,11 @@
+<input checked type="radio" id="login" name="${apiUrlElementName.NAME_SEARCH_TYPE}" value="${apiUrlQualifier.API_URL_USER_QUALIFIER}">
+<label for="login">login</label>
+
+<input type="radio" id="in-login" name="${apiUrlElementName.NAME_SEARCH_TYPE}" value="${apiUrlQualifier.API_URL_INLOGIN_QUALIFIER}">
+<label for="in-login">in-login</label>
+
+<input type="radio" id="in-name" name="${apiUrlElementName.NAME_SEARCH_TYPE}" value="${apiUrlQualifier.API_URL_INNAME_QUALIFIER}">
+<label for="in-name">in-name</label>
+
+<input type="radio" id="fullname" name="${apiUrlElementName.NAME_SEARCH_TYPE}" value="${apiUrlQualifier.API_URL_FULLNAME_QUALIFIER}">
+<label for="fullname">fullname</label>
