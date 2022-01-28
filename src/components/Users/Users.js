@@ -70,7 +70,6 @@ class Users {
                 // get data from group (fieldset html tag)
                 if(key.includes(apiUrlIdentifier.API_URL_GROUP_IDENTIFIER)) {
                     formData[key].forEach(item => {
-                        // rule for single qualifiers
                         if(item[0].includes(apiUrlIdentifier.API_URL_SINGLE_QUALIFIER_IDENTIFIER) && item[1]) {
                             qualifiers += item[0].replace(apiUrlRegExp.API_URL_SINGLE_QUALIFIER_REGEXP, '') + item[1] + '+';
                         }
@@ -79,9 +78,9 @@ class Users {
                             qualifiers += item[1] + ' ' + item[0].replace(apiUrlRegExp.API_URL_DOUBLE_QUALIFIER_REGEXP, '') + '+'; 
                         }
                         // rule for boolean operators
-                        if(item[0].includes(apiUrlIdentifier.API_URL_BOOLEAN_OPERATOR_IDENTIFIER) && item[1]) {
-                            qualifiers += item[1] + '+'; 
-                        }
+                        // if(item[0].includes(apiUrlIdentifier.API_URL_BOOLEAN_OPERATOR_IDENTIFIER) && item[1]) {
+                        //     qualifiers += item[1] + '+'; 
+                        // }
                         // console.log(item[0], item[1]);
                     });
                 }

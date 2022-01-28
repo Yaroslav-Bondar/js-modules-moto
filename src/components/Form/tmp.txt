@@ -9,3 +9,15 @@
 
 <input type="radio" id="fullname" name="${apiUrlElementName.NAME_SEARCH_TYPE}" value="${apiUrlQualifier.API_URL_FULLNAME_QUALIFIER}">
 <label for="fullname">fullname</label>
+
+       <label for="name">in-login</label>
+                    <input value='gesha' type="text" id="in-login" name="${apiUrlQualifier.API_URL_INLOGIN_QUALIFIER}" placeholder="Search user by login..."
+                    aria-label="Search user by in-login">
+
+                    <label for="in-name">in-name</label>
+                    <input type="text" id="in-name" name="${apiUrlQualifier.API_URL_INNAME_QUALIFIER}" placeholder="Search user by login..."
+                    aria-label="Search user by in-name">
+
+                    <label for="fullname">fullname</label>
+                    <input type="text" id="fullname" name="${apiUrlQualifier.API_URL_FULLNAME_QUALIFIER}" placeholder="Search user by login..."
+                    aria-label="Search user by fullname">
