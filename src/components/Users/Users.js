@@ -11,6 +11,8 @@ import {Err} from '../Error';
 import * as apiUrlElementName from '../../constants/api/apiUrlElementName';
 import * as apiUrlIdentifier from '../../constants/api/apiUrlIdentifier';
 import * as apiUrlRegExp from '../../constants/api/apiUrlRegExp';
+import apiUrlPropertyCleaner from '../../utils/apiUrlPropertyCleaner';
+
 
 
 import 'tuicss';
@@ -60,7 +62,8 @@ class Users {
         this.eventListenerLoadMore();
     }
     async render(formData) {
-        let qualifiers = '', parameters = '' + '&stars:>=1&sort=stars&order=desc&page=1&per_page=10';
+        // &sort=stars
+        let qualifiers = '', parameters = '' + '&stars:>=1&order=desc&page=1&per_page=10';
         if(formData) {
             this.currentDataPage = 1; 
             this.isLoadMore = false;
@@ -71,12 +74,18 @@ class Users {
                 if(key.includes(apiUrlIdentifier.API_URL_GROUP_IDENTIFIER)) {
                     formData[key].forEach(item => {
                         if(item[0].includes(apiUrlIdentifier.API_URL_SINGLE_QUALIFIER_IDENTIFIER) && item[1]) {
-                            qualifiers += item[0].replace(apiUrlRegExp.API_URL_SINGLE_QUALIFIER_REGEXP, '') + item[1] + '+';
+                            qualifiers += apiUrlPropertyCleaner(item[0]) + item[1] + '+';
+                            // .replace(apiUrlRegExp.API_URL_SINGLE_QUALIFIER_REGEXP, '')
+                            // qualifiers += item[0].replace(apiUrlRegExp.API_URL_SINGLE_QUALIFIER_REGEXP, '') + item[1] + '+';
                         }
                         // rule for double qualifiers
                         if(item[0].includes(apiUrlIdentifier.API_URL_DOUBLE_QUALIFIER_IDENTIFIER) && item[1]) {
                             qualifiers += item[1] + ' ' + item[0].replace(apiUrlRegExp.API_URL_DOUBLE_QUALIFIER_REGEXP, '') + '+'; 
                         }
+                        if(item[0].includes(apiUrlIdentifier.API_URL_PARAMETER_IDENTIFIER) && item[1]) {
+                            parameters += '&' + apiUrlPropertyCleaner(item[0]) + item[1];
+                        }
+
                         // rule for boolean operators
                         // if(item[0].includes(apiUrlIdentifier.API_URL_BOOLEAN_OPERATOR_IDENTIFIER) && item[1]) {
                         //     qualifiers += item[1] + '+'; 
