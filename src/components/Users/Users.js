@@ -11,7 +11,7 @@ import {Err} from '../Error';
 import * as apiUrlElementName from '../../constants/api/apiUrlElementName';
 import * as apiUrlIdentifier from '../../constants/api/apiUrlIdentifier';
 import * as apiUrlRegExp from '../../constants/api/apiUrlRegExp';
-import apiUrlPropertyCleaner from '../../utils/apiUrlPropertyCleaner';
+import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
 
 
 
@@ -47,7 +47,7 @@ class Users {
         if(!this.usersList) {   // * update users__amount
             let html =`
             <div class="users__container">
-                <div class="users__amount">${data.total_count}</div>  
+                <div class="users__amount">total_count: ${data.total_count}</div>  
                 <ul class="users__list">
                     ${htmlUsers}
                 </ul>
@@ -62,66 +62,20 @@ class Users {
         this.eventListenerLoadMore();
     }
     async render(formData) {
-        // &sort=stars
-        let qualifiers = '', parameters = '' + '&stars:>=1&order=desc&page=1&per_page=10';
+        // &sort=stars &order=desc &stars:>=1
+        // let qualifiers = '', parameters = '' + '&page=1&per_page=10';
         if(formData) {
             this.currentDataPage = 1; 
             this.isLoadMore = false;
             this.currentRequestOptions = '?q='; 
-            // get request part of url
-            for (const key in formData) {
-                // get data from group (fieldset html tag)
-                if(key.includes(apiUrlIdentifier.API_URL_GROUP_IDENTIFIER)) {
-                    formData[key].forEach(item => {
-                        if(item[0].includes(apiUrlIdentifier.API_URL_SINGLE_QUALIFIER_IDENTIFIER) && item[1]) {
-                            qualifiers += apiUrlPropertyCleaner(item[0]) + item[1] + '+';
-                            // .replace(apiUrlRegExp.API_URL_SINGLE_QUALIFIER_REGEXP, '')
-                            // qualifiers += item[0].replace(apiUrlRegExp.API_URL_SINGLE_QUALIFIER_REGEXP, '') + item[1] + '+';
-                        }
-                        // rule for double qualifiers
-                        if(item[0].includes(apiUrlIdentifier.API_URL_DOUBLE_QUALIFIER_IDENTIFIER) && item[1]) {
-                            qualifiers += item[1] + ' ' + item[0].replace(apiUrlRegExp.API_URL_DOUBLE_QUALIFIER_REGEXP, '') + '+'; 
-                        }
-                        if(item[0].includes(apiUrlIdentifier.API_URL_PARAMETER_IDENTIFIER) && item[1]) {
-                            parameters += '&' + apiUrlPropertyCleaner(item[0]) + item[1];
-                        }
-
-                        // rule for boolean operators
-                        // if(item[0].includes(apiUrlIdentifier.API_URL_BOOLEAN_OPERATOR_IDENTIFIER) && item[1]) {
-                        //     qualifiers += item[1] + '+'; 
-                        // }
-                        // console.log(item[0], item[1]);
-                    });
-                }
-                // if the field for type user name/login/fullname is not empty
-
-                // if(key == apiUrlElementName.NAME_SEARCH_VALUE && formData.qualifier[key]) {
-                    
-                //     this.currentRequestOptions += key + apiUrlSign.API_URL_COLON_SIGN + formData.qualifier[key] + apiUrlSign.API_URL_PLUS_SIGN;      
-                // }
-            }
-            console.log(qualifiers);
-            qualifiers = qualifiers.slice(0, qualifiers.length - 1);
-            this.currentRequestOptions += qualifiers + parameters; 
-            // this.currentRequestOptions = this.currentRequestOptions.slice(0, this.currentRequestOptions.length - 1);
-            // get request part of url
+            this.currentRequestOptions += getApiUrlOptions(formData);
             console.log(this.currentRequestOptions);
-
-            // this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_LANGUAGE_REGEXP, (...match) => {
-            //     return match[1] + formData.language;
-            // });
-            // this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_LOCATION_REGEXP, (...match) => {
-            //     return match[1] + formData.country;
-            // });
-            // this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_PAGE_REGEXP, (...match) => {
-            //     return match[1] + this.currentDataPage;
-            // });
         }
         else {
             this.currentDataPage++;
             this.isLoadMore = true;
             this.currentRequestOptions = this.currentRequestOptions.replace(API_URL_PAGE_REGEXP, (...match) => {
-                return match[1] + this.currentDataPage;
+                return match[1] + this.currentDataPage;  // *
             });
         }
         console.log(this.urlUsers + this.currentRequestOptions);
@@ -136,12 +90,11 @@ class Users {
     }
     eventListenerLoadMore() {
         document.querySelector('.users__load-more').addEventListener('click', () => {
-            // console.log('eventListenerLoadMore()');
             this.render();
         });
     }
     eventListener() {
-        document.querySelectorAll(`.${classes.users__item}`).forEach(el => {
+        document.querySelectorAll(`.${classes.users__item}`).forEach(el => {  // * event delegation
             el.addEventListener('click', async () => {
                 // * 
                 ROOT_MODAL.innerHTML += `          

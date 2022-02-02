@@ -14,6 +14,7 @@ class GetDataApi {
             // else if(response.data) {         // response for User
             //     return response.data;
             // }
+            console.log(response.data);
             return response.data;
         }
         catch(err) {
