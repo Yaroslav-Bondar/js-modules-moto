@@ -21,7 +21,7 @@ class Form {
                     <legend>required user data</legend>
 
                     <label for="user">user</label>
-                    <input value='alena' type="text" id="user" name="user${apiUrlIdentifier.API_URL_VALUE_IDENTIFIER}" placeholder="Search user by login..."
+                    <input value='ddddd' type="text" id="user" name="user${apiUrlIdentifier.API_URL_VALUE_IDENTIFIER}" placeholder="Search user by login..."
                     aria-label="Search user by name">
 
                     <select id="user-search-type" name="user-search-type${apiUrlIdentifier.API_URL_KEY_IDENTIFIER}">

@@ -35,6 +35,7 @@ User.prototype.userRender = function(data) {
 }
 User.prototype.render = async function(login) {
     const data = await getDataApi.getData(API_URL + '/' + API_URL_USERS + '/' + login);
+    console.log(data);
     data instanceof Error ? Err.render(data, user, 'error__miniscreen', 'error user data') : this.userRender(data);
 }
 export default new User();

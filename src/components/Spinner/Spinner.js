@@ -2,7 +2,10 @@ import classes from './Spinner.css';
 import 'tuicss';
 class Spinner {
     handleClear() {
-        document.querySelector(`.tui-progress-bar`).remove();
+        // checking if other components, for example (Error component ),
+        // have not overwritten the contents of the container
+        if(document.querySelector(`.tui-progress-bar`))
+            document.querySelector(`.tui-progress-bar`).remove();
     }
     render(parent, className) {
         let html = `

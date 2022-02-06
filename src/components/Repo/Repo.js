@@ -19,7 +19,7 @@ class Repo {
                         'language', 'id', 'description', 'created_at', 'updated_at', 'pushed_at'];
         const notEnteredKey = [];
         const keysName = {};
-        data.forEach(repo => {
+        data.items.forEach(repo => {
             const dataCorrected = dataWorker.correctData(repo);
             dataWorker.sortKey(dataCorrected, topKeys, notEnteredKey).forEach(key => {
                 fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName, classes.repo__field,
