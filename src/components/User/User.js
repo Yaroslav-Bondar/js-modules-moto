@@ -21,6 +21,7 @@ User.prototype.userRender = function(data) {
     dataWorker.sortKey(dataCorrected, topKeys, notEnteredKey).forEach(key => {
         fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName);
     });
+    // console.log(user);
     user.classList.add(`${classes.user__container}`);
     user.innerHTML = `
         <h2 class="${classes.user__title}">Hero</h2>
@@ -35,7 +36,7 @@ User.prototype.userRender = function(data) {
 }
 User.prototype.render = async function(login) {
     const data = await getDataApi.getData(API_URL + '/' + API_URL_USERS + '/' + login);
-    console.log(data);
+    // console.log('User render ', data);
     data instanceof Error ? Err.render(data, user, 'error__miniscreen', 'error user data') : this.userRender(data);
 }
 export default new User();

@@ -126,17 +126,17 @@ class Users {
     eventListener() {
         document.querySelectorAll(`.${classes.users__item}`).forEach(el => {  // * event delegation
             el.addEventListener('click', async () => {
-                // * 
-                ROOT_MODAL.innerHTML += `          
-                    <div class="wrapper__modal">
+                // * onclick on button close modal change on constant
+                ROOT_MODAL.insertAdjacentHTML('beforeend',          
+                    `<div class="wrapper__modal">
                         <div class="container__modal">
                             <div id="user"></div>
                             <div id="repo"></div>
                         </div>
-                        <button onclick="modal.innerHTML = '';body.style.overflow = ''" class = "${classes['user__close']}">
+                        <button onclick="modal.innerHTML = ''; body.style.overflow = ''" class = "${classes['user__close']}">
                             [x]
                         </button>
-                    </div>`;
+                    </div>`);
                 Spinner.render(document.querySelector('.container__modal')); // *
                 await User.render(el.getAttribute('data-user-login'));
                 await Repo.render(el.getAttribute('data-user-login'));

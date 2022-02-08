@@ -1,12 +1,28 @@
 import {getDataApi} from '../../utils';
 import classes from './Repo.css';
 import dataWorker from '../../utils';
-import {API_URL, API_URL_REPO, API_URL_SEARCH, API_URL_REPO_OPTIONS} from '../../constants/api';
+// , API_URL_REPO_OPTIONS
+import {API_URL, API_URL_REPO, API_URL_SEARCH} from '../../constants/api';
+import {API_URL_SINGLE_QUALIFIER_REGEXP, API_URL_PARAMETER_REGEXP} from '../../constants/api/apiUrlIdentifier';
+import {API_URL_USER_QUALIFIER, API_URL_LANGUAGE_QUALIFIER} from '../../constants/api/apiUrlQualifier';
+import {API_URL_REPO_DATA} from '../../constants/api/apiUrlValue';
+import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
 import {Err} from '../Error';
+// import from '../';
+
 class Repo {
     async render(login) {
-        const repoUrlTemplate = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_REPO + API_URL_REPO_OPTIONS;
-        const repoUrl = repoUrlTemplate.replace(/user_name/, login);    
+        // console.log(API_URL_REPO_OPTIONS);
+        let apiUrlRepoData = API_URL_REPO_DATA;
+        apiUrlRepoData[API_URL_USER_QUALIFIER] = login;
+        apiUrlRepoData[API_URL_LANGUAGE_QUALIFIER] = login; // * get language
+        // apiUrlRepoData[]
+        const apiUrlRepoOptions = getApiUrlOptions(API_URL_REPO_DATA);
+        // apiUrlRepoOptions.match(new RegExp(`${API_URL_USER_QUALIFIER}`)).replace()
+        // API_URL_REPO_OPTIONS
+        const repoUrlTemplate = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_REPO + apiUrlRepoOptions;
+        console.log(repoUrlTemplate);
+        // const repoUrl = repoUrlTemplate.replace(/user_name/, login);    
         const data = await getDataApi.getData(repoUrl);
         data instanceof Error ? Err.render(data, repo) : this.renderRepo(data);
     }

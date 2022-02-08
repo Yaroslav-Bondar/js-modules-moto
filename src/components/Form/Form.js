@@ -1,7 +1,7 @@
 import {ROOT_INDEX} from '../../constants/root';
 import Users from '../Users';
 import Spinner from '../Spinner';
-import API_URL_QUALIFIER from '../../constants/api/apiUrlQualifier';
+import * as API_URL_QUALIFIER from '../../constants/api/apiUrlQualifier';
 // import * as apiUrlValue from '../../constants/api/apiUrlValue';
 import * as apiUrlElementName from '../../constants/api/apiUrlElementName';
 import * as apiUrlIdentifier from '../../constants/api/apiUrlIdentifier';
@@ -20,11 +20,11 @@ class Form {
                 <fieldset name="user_search${apiUrlIdentifier.API_URL_DOUBLE_GROUP_IDENTIFIER}">
                     <legend>required user data</legend>
 
-                    <label for="user">user</label>
-                    <input value='ddddd' type="text" id="user" name="user${apiUrlIdentifier.API_URL_VALUE_IDENTIFIER}" placeholder="Search user by login..."
+                    <label for="form__user">user</label>
+                    <input value='marina' type="text" id="form__user" name="user" data-identifier=${apiUrlIdentifier.API_URL_VALUE_IDENTIFIER} placeholder="Search user by login..."
                     aria-label="Search user by name">
 
-                    <select id="user-search-type" name="user-search-type${apiUrlIdentifier.API_URL_KEY_IDENTIFIER}">
+                    <select id="user-search-type" name="user-search-type" data-identifier=${apiUrlIdentifier.API_URL_KEY_IDENTIFIER}>
                         <option value="${API_URL_QUALIFIER.API_URL_INNAME_QUALIFIER}" selected>INNAME</option>
                         <option value="${API_URL_QUALIFIER.API_URL_FULLNAME_QUALIFIER}">FULLNAME</option>
                         <option value="${API_URL_QUALIFIER.API_URL_INLOGIN_QUALIFIER}">INLOGIN</option>
@@ -85,47 +85,79 @@ class Form {
         });
     }
     getDataForm() {
+        // let formData = {};
         let formData = {};
-        for(let i = 0; i < this.#formUsers.elements.length; i++) { // * check for epmty field
+        // serialization of form data 
+        const formElements = this.#formUsers.elements; 
+        for(let i = 0; i < formElements.length; i++) { // * check for epmty field
             // rules for groups
-            // rule for API_URL_SIMPLE_GROUP_IDENTIFIER
-            if(this.#formUsers.elements[i].name.includes(apiUrlIdentifier.API_URL_SIMPLE_GROUP_IDENTIFIER)) {
-                for(let j = 0; j < this.#formUsers.elements[i].elements.length; j++) {
+            // rule for API_URL_SIMPLE_GROUP_IDENTIFIER API_URL_GROUP_IDENTIFIER
+            if(formElements[i].name.includes(apiUrlIdentifier.API_URL_SIMPLE_GROUP_IDENTIFIER)) {
+                for(let j = 0; j < formElements[i].elements.length; j++) {
                     // check value field for empty
-                    if(!this.#formUsers.elements[i].elements[j].value) continue;
-                    if(Array.isArray(formData[this.#formUsers.elements[i].name])) {
-                        formData[this.#formUsers.elements[i].name].push([this.#formUsers.elements[i].elements[j].dataset.identifier, 
-                            this.#formUsers.elements[i].elements[j].value])
-                        }
-                    else {
-                        formData[this.#formUsers.elements[i].name] = [[this.#formUsers.elements[i].elements[j].dataset.identifier, 
-                            this.#formUsers.elements[i].elements[j].value]];
-                    }
+                    if(!formElements[i].elements[j].value) continue;
+                        formData[formElements[i].elements[j].dataset.identifier] = formElements[i].elements[j].value;
+                    // if(!formData[formElements[i].name]) {
+                        // formData[formElements[i].name] = {[formElements[i].elements[j].dataset.identifier]: formElements[i].elements[j].value}
+                    // }
+                    // else {
+                        // formData[formElements[i].name][formElements[i].elements[j].dataset.identifier] = formElements[i].elements[j].value
+                    // }
                 }
             }
-            // rule for API_URL_DOUBLE_GROUP_IDENTIFIER
-            if(this.#formUsers.elements[i].name.includes(apiUrlIdentifier.API_URL_DOUBLE_GROUP_IDENTIFIER)) {
+            // serialization rule for double group
+            if(formElements[i].name.includes(apiUrlIdentifier.API_URL_DOUBLE_GROUP_IDENTIFIER)) {
                 let key, value;
-                for(let j = 0; j < this.#formUsers.elements[i].elements.length; j++) {
-                    if(this.#formUsers.elements[i].elements[j].name.includes(`${apiUrlIdentifier.API_URL_VALUE_IDENTIFIER}`)
-                    && this.#formUsers.elements[i].elements[j].value) {
-                        value = this.#formUsers.elements[i].elements[j].value;
-                    }
-                    else 
-                    if(this.#formUsers.elements[i].elements[j].name.includes(`${apiUrlIdentifier.API_URL_KEY_IDENTIFIER}`)
-                    && this.#formUsers.elements[i].elements[j].value) {
-                        key = this.#formUsers.elements[i].elements[j].value;
-                    }
-                    else {
-                        break;
-                    }
+                for(let j = 0; j < formElements[i].elements.length; j++) {
+                    // if at least one value is empty exit the loop
+                    if(!formElements[i].elements[j].value) break;
+                    if(formElements[i].elements[j].dataset.identifier.includes(apiUrlIdentifier.API_URL_KEY_IDENTIFIER))
+                        key = formElements[i].elements[j].value;
+                    if(formElements[i].elements[j].dataset.identifier.includes(apiUrlIdentifier.API_URL_VALUE_IDENTIFIER))
+                        value = formElements[i].elements[j].value;    
                 }
-                if(key && value) {
-                    formData[this.#formUsers.elements[i].name] = [[key, value]];
-                }
+                // if both items are not empty includes them in the result object
+                if(key && value) formData[key] = value;
             }
+            //array
+            // if(formElements[i].name.includes(apiUrlIdentifier.API_URL_SIMPLE_GROUP_IDENTIFIER)) {
+            //     for(let j = 0; j < formElements[i].elements.length; j++) {
+            //         // check value field for empty
+            //         if(!formElements[i].elements[j].value) continue;
+            //         if(Array.isArray(formData[formElements[i].name])) {
+            //             formData[formElements[i].name].push([formElements[i].elements[j].dataset.identifier, 
+            //                 formElements[i].elements[j].value])
+            //             }
+            //         else {
+            //             formData[formElements[i].name] = [[formElements[i].elements[j].dataset.identifier, 
+            //                 formElements[i].elements[j].value]];
+            //         }
+            //     }
+            // }
+            // // rule for API_URL_DOUBLE_GROUP_IDENTIFIER
+            // if(formElements[i].name.includes(apiUrlIdentifier.API_URL_DOUBLE_GROUP_IDENTIFIER)) {
+            //     let key, value;
+            //     for(let j = 0; j < formElements[i].elements.length; j++) {
+            //         if(formElements[i].elements[j].name.includes(`${apiUrlIdentifier.API_URL_VALUE_IDENTIFIER}`)
+            //         && formElements[i].elements[j].value) {
+            //             value = formElements[i].elements[j].value;
+            //         }
+            //         else 
+            //         if(formElements[i].elements[j].name.includes(`${apiUrlIdentifier.API_URL_KEY_IDENTIFIER}`)
+            //         && formElements[i].elements[j].value) {
+            //             key = formElements[i].elements[j].value;
+            //         }
+            //         else {
+            //             break;
+            //         }
+            //     }
+            //     if(key && value) {
+            //         formData[formElements[i].name] = [[key, value]];
+            //     }
+            // }
         }
         console.log(formData);
+        console.log('formData', formData);
         return formData;
     }
 }
