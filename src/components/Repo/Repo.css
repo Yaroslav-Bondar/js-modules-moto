@@ -1,4 +1,4 @@
-.repo__info {
+.repo__list {
     color: brown;
 }
 .repo__fields {
@@ -20,4 +20,7 @@
 }
 .repo__show-less {
     display: none;
+}
+.repo__download-more-btn {
+    
 }

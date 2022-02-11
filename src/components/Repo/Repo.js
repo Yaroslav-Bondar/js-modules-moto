@@ -11,47 +11,77 @@ import {Err} from '../Error';
 // import from '../';
 
 class Repo {
+
     async render(login) {
-        // console.log(API_URL_REPO_OPTIONS);
         let apiUrlRepoData = API_URL_REPO_DATA;
         apiUrlRepoData[API_URL_USER_QUALIFIER] = login;
-        apiUrlRepoData[API_URL_LANGUAGE_QUALIFIER] = login; // * get language
-        // apiUrlRepoData[]
-        const apiUrlRepoOptions = getApiUrlOptions(API_URL_REPO_DATA);
-        // apiUrlRepoOptions.match(new RegExp(`${API_URL_USER_QUALIFIER}`)).replace()
-        // API_URL_REPO_OPTIONS
-        const repoUrlTemplate = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_REPO + apiUrlRepoOptions;
-        console.log(repoUrlTemplate);
-        // const repoUrl = repoUrlTemplate.replace(/user_name/, login);    
-        const data = await getDataApi.getData(repoUrl);
+        // get api query string from serialization object
+        const apiUrlRepoOptions = getApiUrlOptions(apiUrlRepoData);
+        const apiUrlRepo = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_REPO + '?q=' + apiUrlRepoOptions;
+        console.log(apiUrlRepo);
+        const data = await getDataApi.getData(apiUrlRepo);
         data instanceof Error ? Err.render(data, repo) : this.renderRepo(data);
     }
     renderRepo(data) {
-        let fieldHtml = '', reposHtml = '';
-        const buttonsHtml = `<button class="show__more ${classes['repo__show-more']}">Show more</button>
-                                <button class="show__less ${classes['repo__show-less']}">Show less</button>`;
-
-        const topKeys = ['name', 'full_name', 'html_url', 'clone_url', 'git_url', 'stargazers_count',
-                        'language', 'id', 'description', 'created_at', 'updated_at', 'pushed_at'];
-        const notEnteredKey = [];
-        const keysName = {};
-        data.items.forEach(repo => {
-            const dataCorrected = dataWorker.correctData(repo);
-            dataWorker.sortKey(dataCorrected, topKeys, notEnteredKey).forEach(key => {
-                fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName, classes.repo__field,
-                             classes.repo__key, classes.repo__value);
-            });
-            reposHtml += `<ul class="${classes.repo__fields}">${fieldHtml + buttonsHtml}</ul>`;
-            fieldHtml = '';
-        });
-        repo.innerHTML = `
+        // console.log(data);
+        // ${reposHtml}
+        // <button class="classes.repo__download-more-btn">Show More</button> 
+        console.log(document.querySelector(`.${classes.repo__list}`));
+        if(!document.querySelector(`.${classes.repo__list}`)) {
+            repo.innerHTML = `
             <h2 class="${classes.repo__title}">User repository</h2>
-            <ul class="${classes.repo__info}">
-                ${reposHtml};
-            </ul>`; 
-        this.showMore();
-        this.showLess();
+            <div class="${classes.repo__list}">
+            <div/>
+            <button class="${classes['repo__download-more-btn']}">Download Repo More</button>
+            `; 
+            // console.log(document.querySelector(`.${classes.repo__list}`));
+            this.init();
+        }
+        console.log(this.repoList);
+        // data.items.
+        if(data.items.length) {
+            let fieldHtml = '', reposHtml = '';
+            const buttonsHtml = `<button class="show__more ${classes['repo__show-more']}">Show more</button>
+                                    <button class="show__less ${classes['repo__show-less']}">Show less</button>`;
+    
+            const topKeys = ['name', 'full_name', 'html_url', 'clone_url', 'git_url', 'stargazers_count',
+                            'language', 'id', 'description', 'created_at', 'updated_at', 'pushed_at'];
+            const notEnteredKey = [];
+            const keysName = {};
+            data.items.forEach(repo => {
+                // get html to render with sorted, desired keys and display order
+                const dataCorrected = dataWorker.correctData(repo);
+                
+                dataWorker.sortKey(dataCorrected, topKeys, notEnteredKey).forEach(key => {
+                    fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName, classes.repo__field,
+                                 classes.repo__key, classes.repo__value);
+                });
+                reposHtml += `<ul class="${classes.repo__fields}">${fieldHtml + buttonsHtml}</ul>`;
+                this.repoList.insertAdjacentHTML('beforeend', reposHtml);
+                fieldHtml = '';
+            });
+            this.showMore();
+            this.showLess();
+        } else {
+            //hide loadMoreBtn
+            this.toggleStateLoadRepoMoreBtn(data.items.length);        
+        } 
+
     }
+    init() {
+        this.downloadRepoMoreBtn = document.querySelector(`.${classes['repo__download-more-btn']}`);
+        console.log('this.downloadRepoMoreBtn ', this.downloadRepoMoreBtn, classes['repo__download-more-btn']);
+        this.repoList = document.querySelector(`.${classes.repo__list}`);
+    }
+    // show/hide load more button
+    toggleStateLoadRepoMoreBtn(state) {
+        this.downloadRepoMoreBtn.style.display = state ? 'block' : 'none';
+    }
+    eventListenerLoadMoreBtn() {
+        this.downloadRepoMoreBtn.addEventListener('click', () => {
+            this.render();
+        });
+    }   
     showMore() {
         document.querySelector(`.${classes.repo__info}`).addEventListener('click', (e) => {
             if(!e.target.classList.contains(`${classes['repo__show-more']}`)) return;

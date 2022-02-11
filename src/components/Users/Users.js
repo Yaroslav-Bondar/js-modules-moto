@@ -23,7 +23,7 @@ class Users {
     // currentRequestOptions = API_URL_USERS_OPTIONS;
     currentRequestOptions = '?q=';
     renderUsers(data, isLoadMore) {   // possible use Promise, for discrete rendering
-        // console.log(data.items.length);
+        // console.log(data.length);
         if(!this.usersList) {    // * possible declare in constructor
             let htmlSkeleton =`
             <div class="users__container">
@@ -60,7 +60,7 @@ class Users {
                 if(data.total_count != this.usersAmountItem.textContent) this.usersAmountItem.textContent = data.total_count;
             }
             // increase counter loaded users
-            this.totalLoadedUsers += data.items.length;
+            this.totalLoadedUsers += data.length;
             // show/hide load more button
             if(data.total_count !== this.totalLoadedUsers) {
                 this.toggleStateLoadMoreButton(data.total_count !== this.totalLoadedUsers);
@@ -76,7 +76,7 @@ class Users {
             this.toggleStateLoadMoreButton(data.total_count);
             this.usersAmountItem.textContent = data.total_count;
         }
-        console.log(this.totalLoadedUsers);
+        // console.log(this.totalLoadedUsers);
     }
     // show/hide load more button
     toggleStateLoadMoreButton(state) {
@@ -96,7 +96,7 @@ class Users {
             this.isLoadMore = false;
             this.currentRequestOptions = '?q='; // *
             this.currentRequestOptions += getApiUrlOptions(formData);
-            console.log(this.currentRequestOptions);
+            // console.log(this.currentRequestOptions);
         }
         else { // click load more button
             this.currentDataPage++;
@@ -106,7 +106,7 @@ class Users {
                 return match[1] + this.currentDataPage;  // *
             });
         }
-        console.log(this.urlUsers + this.currentRequestOptions);
+        // console.log(this.urlUsers + this.currentRequestOptions);
 
         let data = await getDataApi.getData(this.urlUsers + this.currentRequestOptions);
 
