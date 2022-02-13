@@ -2,7 +2,7 @@ import {getDataApi} from '../../utils';
 import classes from './Repo.css';
 import dataWorker from '../../utils';
 // , API_URL_REPO_OPTIONS
-import {API_URL, API_URL_REPO, API_URL_SEARCH} from '../../constants/api';
+import {API_URL, API_URL_REPO, API_URL_SEARCH, API_URL_PAGE_REGEXP} from '../../constants/api';
 import {API_URL_SINGLE_QUALIFIER_REGEXP, API_URL_PARAMETER_REGEXP} from '../../constants/api/apiUrlIdentifier';
 import {API_URL_USER_QUALIFIER, API_URL_LANGUAGE_QUALIFIER} from '../../constants/api/apiUrlQualifier';
 import {API_URL_REPO_DATA} from '../../constants/api/apiUrlValue';
@@ -11,13 +11,26 @@ import {Err} from '../Error';
 // import from '../';
 
 class Repo {
+    currentDataPage = 1;
+    apiUrlRepoOptions;
+    totalLoadedRepo = 0;
 
     async render(login) {
-        let apiUrlRepoData = API_URL_REPO_DATA;
-        apiUrlRepoData[API_URL_USER_QUALIFIER] = login;
+        let apiUrlRepoData;
+        if(login) {
+            this.currentDataPage = 1; 
+            apiUrlRepoData = API_URL_REPO_DATA;
+            apiUrlRepoData[API_URL_USER_QUALIFIER] = login;
+            this.apiUrlRepoOptions = getApiUrlOptions(apiUrlRepoData);
+        }
+        else {
+            this.currentDataPage++;
+            this.apiUrlRepoOptions = this.apiUrlRepoOptions.replace(API_URL_PAGE_REGEXP, (...match) => {
+                return match[1] + this.currentDataPage;  // *
+            });
+        }
         // get api query string from serialization object
-        const apiUrlRepoOptions = getApiUrlOptions(apiUrlRepoData);
-        const apiUrlRepo = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_REPO + '?q=' + apiUrlRepoOptions;
+        const apiUrlRepo = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_REPO + '?q=' + this.apiUrlRepoOptions;
         console.log(apiUrlRepo);
         const data = await getDataApi.getData(apiUrlRepo);
         data instanceof Error ? Err.render(data, repo) : this.renderRepo(data);
@@ -26,20 +39,33 @@ class Repo {
         // console.log(data);
         // ${reposHtml}
         // <button class="classes.repo__download-more-btn">Show More</button> 
-        console.log(document.querySelector(`.${classes.repo__list}`));
+        // console.log(document.querySelector(`.${classes.repo__list}`));
         if(!document.querySelector(`.${classes.repo__list}`)) {
             repo.innerHTML = `
             <h2 class="${classes.repo__title}">User repository</h2>
             <div class="${classes.repo__list}">
-            <div/>
+            </div>
             <button class="${classes['repo__download-more-btn']}">Download Repo More</button>
             `; 
             // console.log(document.querySelector(`.${classes.repo__list}`));
             this.init();
         }
-        console.log(this.repoList);
+        // console.log(data.items.length);
         // data.items.
         if(data.items.length) {
+            // increase counter loaded repositories
+            this.totalLoadedRepo += data.items.length;
+            if(data.total_count === this.totalLoadedRepo){
+                this.toggleStateLoadRepoMoreBtn(false);
+                this.totalLoadedRepo = 0
+            }
+            // if(data.total_count !== this.totalLoadedUsers) {
+            //     this.toggleStateLoadMoreButton(data.total_count !== this.totalLoadedUsers); // *
+            // }
+            // else {
+            //     this.toggleStateLoadMoreButton(data.total_count !== this.totalLoadedUsers);
+            //     this.totalLoadedUsers = 0; //reset counter loaded users
+            // } 
             let fieldHtml = '', reposHtml = '';
             const buttonsHtml = `<button class="show__more ${classes['repo__show-more']}">Show more</button>
                                     <button class="show__less ${classes['repo__show-less']}">Show less</button>`;
@@ -57,21 +83,24 @@ class Repo {
                                  classes.repo__key, classes.repo__value);
                 });
                 reposHtml += `<ul class="${classes.repo__fields}">${fieldHtml + buttonsHtml}</ul>`;
-                this.repoList.insertAdjacentHTML('beforeend', reposHtml);
                 fieldHtml = '';
             });
+            this.repoList.insertAdjacentHTML('beforeend', reposHtml);
             this.showMore();
             this.showLess();
         } else {
-            //hide loadMoreBtn
-            this.toggleStateLoadRepoMoreBtn(data.items.length);        
+            //hide loadMoreRepoBtn
+            // this.toggleStateLoadRepoMoreBtn(data.items.length);
+            this.toggleStateLoadRepoMoreBtn(false);
+            this.totalLoadedRepo = 0        
         } 
 
     }
     init() {
         this.downloadRepoMoreBtn = document.querySelector(`.${classes['repo__download-more-btn']}`);
-        console.log('this.downloadRepoMoreBtn ', this.downloadRepoMoreBtn, classes['repo__download-more-btn']);
+        // console.log('this.downloadRepoMoreBtn ', this.downloadRepoMoreBtn, classes['repo__download-more-btn']);
         this.repoList = document.querySelector(`.${classes.repo__list}`);
+        this.eventListenerLoadMoreBtn();
     }
     // show/hide load more button
     toggleStateLoadRepoMoreBtn(state) {
@@ -79,6 +108,7 @@ class Repo {
     }
     eventListenerLoadMoreBtn() {
         this.downloadRepoMoreBtn.addEventListener('click', () => {
+            console.log('click');
             this.render();
         });
     }   

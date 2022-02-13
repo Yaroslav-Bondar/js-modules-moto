@@ -63,7 +63,7 @@ class Users {
             this.totalLoadedUsers += data.length;
             // show/hide load more button
             if(data.total_count !== this.totalLoadedUsers) {
-                this.toggleStateLoadMoreButton(data.total_count !== this.totalLoadedUsers);
+                this.toggleStateLoadMoreButton(data.total_count !== this.totalLoadedUsers); // *
             }
             else {
                 this.toggleStateLoadMoreButton(data.total_count !== this.totalLoadedUsers);
