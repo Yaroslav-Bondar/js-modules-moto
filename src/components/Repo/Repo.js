@@ -10,13 +10,12 @@ import {Err} from '../Error';
 
 class Repo {
     loadedRepoCounter = 0;  
+    apiUrlRepoData = API_URL_REPO_DATA; 
     async render(login) {
         if(login) {
             this.currentDataPage = 1; 
-            let apiUrlRepoData;
-            apiUrlRepoData = API_URL_REPO_DATA;   // adding user login value 
-            apiUrlRepoData[API_URL_USER_QUALIFIER] = login; // to "serialized" object
-            this.apiUrlRepoOptions = getApiUrlOptions(apiUrlRepoData); 
+            this.apiUrlRepoData[API_URL_USER_QUALIFIER] = login; // adding user login value to "serialized" object
+            this.apiUrlRepoOptions = getApiUrlOptions(this.apiUrlRepoData); 
         }
         else {
             this.currentDataPage++;
@@ -26,7 +25,7 @@ class Repo {
         }
         // get api query string from serialization object
         const apiUrlRepo = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_REPO + '?q=' + this.apiUrlRepoOptions;
-        console.log(apiUrlRepo);
+        // console.log(apiUrlRepo);
         const data = await getDataApi.getData(apiUrlRepo);
         data instanceof Error ? Err.render(data, repo) : this.renderRepo(data);
     }
@@ -66,7 +65,8 @@ class Repo {
                 fieldHtml = '';
             });
             this.repoList.insertAdjacentHTML('beforeend', reposHtml);
-            this.handlerRepoBtns();
+            // this.handlerRepoBtns();
+            this.handlerRepoInfoBtns();
         } else {
             this.toggleStateRepoMoreBtn(false);  // hide loadMoreRepoBtn
             this.loadedRepoCounter = 0        
@@ -75,6 +75,7 @@ class Repo {
     init() {
         this.repoMoreBtn = document.querySelector(`.${classes['repo__download-more-btn']}`);
         this.repoList = document.querySelector(`.${classes.repo__list}`);
+        this.handlerRepoMoreBtn();
     }
     // show/hide load more button
     toggleStateRepoMoreBtn(state) {
@@ -132,9 +133,9 @@ class Repo {
             }  
         });
     }
-    handlerRepoBtns() {
-        this.handlerRepoInfoBtns();
-        this.handlerRepoMoreBtn();
-    }
+    // handlerRepoBtns() {
+        // this.handlerRepoInfoBtns();
+        // this.handlerRepoMoreBtn();
+    // }
 }
 export default new Repo();

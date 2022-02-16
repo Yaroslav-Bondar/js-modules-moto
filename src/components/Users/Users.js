@@ -15,27 +15,22 @@ import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
 
 import 'tuicss';
 class Users {
-    totalLoadedUsers = 0;
-    currentDataPage = 1; // * validation 
-    isLoadMore = false;  // * 
-    // usersList;  // * Does it need here?
+    constructor() {
+        this.loadedUsersCounter = 0;
+        let htmlSkeleton =`
+        <div class="users__container">
+            <div class="users__amount">total_count: <span class="users__amount-item"></span></div>  
+            <ul class="users__list">
+            </ul>
+            <button type="button" class="users__more-button" style="display=none;">Load more</button>
+        </div>`;
+        ROOT_INDEX.insertAdjacentHTML('beforeend', htmlSkeleton);
+        this.init();
+    }
     urlUsers = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_USERS; // * ? one variable
-    // currentRequestOptions = API_URL_USERS_OPTIONS;
     currentRequestOptions = '?q=';
-    renderUsers(data, isLoadMore) {   // possible use Promise, for discrete rendering
-        // console.log(data.length);
-        if(!this.usersList) {    // * possible declare in constructor
-            let htmlSkeleton =`
-            <div class="users__container">
-                <div class="users__amount">total_count: <span class="users__amount-item"></span></div>  
-                <ul class="users__list">
-                </ul>
-                <button type="button" class="users__more-button" style="display=none;">Load more</button>
-            </div>`;
-            ROOT_INDEX.insertAdjacentHTML('beforeend', htmlSkeleton);
-            this.init();
-        }
-        if(data.items.length !== 0) {
+    renderUsers(data, isLoadMore) { 
+        if(data.items.length) {
             let htmlUsers = '';
             // preparation of html for users data 
             data.items.forEach(({id, login, avatar_url : avatarUrl}) => {
@@ -46,51 +41,47 @@ class Users {
                     <img class="${classes.users__img}" src="${avatarUrl}" alt="user_avatar"/>
                 </li>`;
             });
-            // if click the load more button
-            if(this.usersList && isLoadMore) {  // * possible without this.usersList 
-                console.log('load more', htmlUsers);
+            if(isLoadMore) {   
                 this.usersList.insertAdjacentHTML('beforeend', htmlUsers);
             }
             // if click the form button
-            if(this.usersList && !isLoadMore) {  // * possible without this.usersList
-                this.totalLoadedUsers = 0;
+            if(!isLoadMore) { 
+                this.loadedUsersCounter = 0;
                 this.usersList.innerHTML = '';
                 this.usersList.insertAdjacentHTML('beforeend', htmlUsers);
-                // update total_count loaded users
-                if(data.total_count != this.usersAmountItem.textContent) this.usersAmountItem.textContent = data.total_count;
+                // update the display of the total number of the downloaded users
+                if(data.total_count != this.usersAmountItem.textContent) 
+                    this.usersAmountItem.textContent = data.total_count;
             }
             // increase counter loaded users
-            this.totalLoadedUsers += data.length;
+            this.loadedUsersCounter += data.items.length;
             // show/hide load more button
-            if(data.total_count !== this.totalLoadedUsers) {
-                this.toggleStateLoadMoreButton(data.total_count !== this.totalLoadedUsers); // *
+            if(data.total_count !== this.loadedUsersCounter) {
+                this.toggleStateLoadMoreBtn(true); // *
             }
             else {
-                this.toggleStateLoadMoreButton(data.total_count !== this.totalLoadedUsers);
-                this.totalLoadedUsers = 0; //reset counter loaded users
+                this.toggleStateLoadMoreBtn(false);
+                this.loadedUsersCounter = 0; //reset counter loaded users
             }
         }
         else {
             this.usersList.innerHTML = '';
-            this.totalLoadedUsers = 0;
-            this.toggleStateLoadMoreButton(data.total_count);
+            this.loadedUsersCounter = 0;
+            this.toggleStateLoadMoreBtn(data.total_count);
             this.usersAmountItem.textContent = data.total_count;
         }
-        // console.log(this.totalLoadedUsers);
     }
     // show/hide load more button
-    toggleStateLoadMoreButton(state) {
+    toggleStateLoadMoreBtn(state) {
         this.usersMoreButton.style.display = state ? 'block' : 'none';
     }
     init() {
         this.usersList = ROOT_INDEX.querySelector('.users__list');
-        this.eventListenerLoadMore();
+        this.handlerLoadMoreBtn();
         this.usersAmountItem = document.querySelector('.users__amount-item');
         this.usersMoreButton = document.querySelector('.users__more-button');
     }
     async render(formData) {
-        // &sort=stars &order=desc &stars:>=1
-        // let qualifiers = '', parameters = '' + '&page=1&per_page=10';
         if(formData) {  // click form button
             this.currentDataPage = 1; 
             this.isLoadMore = false;
@@ -115,15 +106,15 @@ class Users {
         }
         else {
             this.renderUsers(data, this.isLoadMore);
-            this.eventListener();
+            this.handlerUserCard();
         }
     }
-    eventListenerLoadMore() {
+    handlerLoadMoreBtn() {
         document.querySelector('.users__more-button').addEventListener('click', () => {
             this.render();
         });
     }
-    eventListener() {
+    handlerUserCard() {
         document.querySelectorAll(`.${classes.users__item}`).forEach(el => {  // * event delegation
             el.addEventListener('click', async () => {
                 // * onclick on button close modal change on constant
