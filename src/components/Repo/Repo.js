@@ -1,27 +1,22 @@
 import {getDataApi} from '../../utils';
 import classes from './Repo.css';
 import dataWorker from '../../utils';
-// , API_URL_REPO_OPTIONS
 import {API_URL, API_URL_REPO, API_URL_SEARCH, API_URL_PAGE_REGEXP} from '../../constants/api';
 import {API_URL_SINGLE_QUALIFIER_REGEXP, API_URL_PARAMETER_REGEXP} from '../../constants/api/apiUrlIdentifier';
 import {API_URL_USER_QUALIFIER, API_URL_LANGUAGE_QUALIFIER} from '../../constants/api/apiUrlQualifier';
 import {API_URL_REPO_DATA} from '../../constants/api/apiUrlValue';
 import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
 import {Err} from '../Error';
-// import from '../';
 
 class Repo {
-    currentDataPage = 1;
-    apiUrlRepoOptions;
-    totalLoadedRepo = 0;
-
+    loadedRepoCounter = 0;  
     async render(login) {
-        let apiUrlRepoData;
         if(login) {
             this.currentDataPage = 1; 
-            apiUrlRepoData = API_URL_REPO_DATA;
-            apiUrlRepoData[API_URL_USER_QUALIFIER] = login;
-            this.apiUrlRepoOptions = getApiUrlOptions(apiUrlRepoData);
+            let apiUrlRepoData;
+            apiUrlRepoData = API_URL_REPO_DATA;   // adding user login value 
+            apiUrlRepoData[API_URL_USER_QUALIFIER] = login; // to "serialized" object
+            this.apiUrlRepoOptions = getApiUrlOptions(apiUrlRepoData); 
         }
         else {
             this.currentDataPage++;
@@ -36,44 +31,29 @@ class Repo {
         data instanceof Error ? Err.render(data, repo) : this.renderRepo(data);
     }
     renderRepo(data) {
-        // console.log(data);
-        // ${reposHtml}
-        // <button class="classes.repo__download-more-btn">Show More</button> 
-        // console.log(document.querySelector(`.${classes.repo__list}`));
+        // creating containers for display repo data
         if(!document.querySelector(`.${classes.repo__list}`)) {
-            repo.innerHTML = `
-            <h2 class="${classes.repo__title}">User repository</h2>
-            <div class="${classes.repo__list}">
-            </div>
-            <button class="${classes['repo__download-more-btn']}">Download Repo More</button>
-            `; 
-            // console.log(document.querySelector(`.${classes.repo__list}`));
+            repo.innerHTML = `<h2 class="${classes.repo__title}">User repository</h2>
+                <div class="${classes.repo__list}">
+                </div>
+                <button class="${classes['repo__download-more-btn']}">Download Repo More</button>`; 
             this.init();
         }
-        // console.log(data.items.length);
-        // data.items.
         if(data.items.length) {
             // increase counter loaded repositories
-            this.totalLoadedRepo += data.items.length;
-            if(data.total_count === this.totalLoadedRepo){
-                this.toggleStateLoadRepoMoreBtn(false);
-                this.totalLoadedRepo = 0
+            this.loadedRepoCounter += data.items.length;
+            if(data.total_count === this.loadedRepoCounter){
+                this.toggleStateRepoMoreBtn(false);
+                this.loadedRepoCounter = 0
             }
-            // if(data.total_count !== this.totalLoadedUsers) {
-            //     this.toggleStateLoadMoreButton(data.total_count !== this.totalLoadedUsers); // *
-            // }
-            // else {
-            //     this.toggleStateLoadMoreButton(data.total_count !== this.totalLoadedUsers);
-            //     this.totalLoadedUsers = 0; //reset counter loaded users
-            // } 
             let fieldHtml = '', reposHtml = '';
             const buttonsHtml = `<button class="show__more ${classes['repo__show-more']}">Show more</button>
                                     <button class="show__less ${classes['repo__show-less']}">Show less</button>`;
-    
+            // keys to be displayed first
             const topKeys = ['name', 'full_name', 'html_url', 'clone_url', 'git_url', 'stargazers_count',
                             'language', 'id', 'description', 'created_at', 'updated_at', 'pushed_at'];
-            const notEnteredKey = [];
-            const keysName = {};
+            const notEnteredKey = []; // not included keys to display
+            const keysName = {}; // names of displayed keys (if needed)
             data.items.forEach(repo => {
                 // get html to render with sorted, desired keys and display order
                 const dataCorrected = dataWorker.correctData(repo);
@@ -86,71 +66,75 @@ class Repo {
                 fieldHtml = '';
             });
             this.repoList.insertAdjacentHTML('beforeend', reposHtml);
-            this.showMore();
-            this.showLess();
+            this.handlerRepoBtns();
         } else {
-            //hide loadMoreRepoBtn
-            // this.toggleStateLoadRepoMoreBtn(data.items.length);
-            this.toggleStateLoadRepoMoreBtn(false);
-            this.totalLoadedRepo = 0        
+            this.toggleStateRepoMoreBtn(false);  // hide loadMoreRepoBtn
+            this.loadedRepoCounter = 0        
         } 
-
     }
     init() {
-        this.downloadRepoMoreBtn = document.querySelector(`.${classes['repo__download-more-btn']}`);
-        // console.log('this.downloadRepoMoreBtn ', this.downloadRepoMoreBtn, classes['repo__download-more-btn']);
+        this.repoMoreBtn = document.querySelector(`.${classes['repo__download-more-btn']}`);
         this.repoList = document.querySelector(`.${classes.repo__list}`);
-        this.eventListenerLoadMoreBtn();
     }
     // show/hide load more button
-    toggleStateLoadRepoMoreBtn(state) {
-        this.downloadRepoMoreBtn.style.display = state ? 'block' : 'none';
+    toggleStateRepoMoreBtn(state) {
+        this.repoMoreBtn.style.display = state ? 'block' : 'none';
     }
-    eventListenerLoadMoreBtn() {
-        this.downloadRepoMoreBtn.addEventListener('click', () => {
-            console.log('click');
+    handlerRepoMoreBtn() {
+        this.repoMoreBtn.addEventListener('click', () => {
             this.render();
         });
-    }   
-    showMore() {
-        document.querySelector(`.${classes.repo__info}`).addEventListener('click', (e) => {
-            if(!e.target.classList.contains(`${classes['repo__show-more']}`)) return;
+    }
+    // show less fields about the repository    
+    handlerLessRepoInfoBtn(fields, btnLess, btnMore) {
+        if(btnMore.style.display = 'none') btnMore.style.display = 'inline-block';
+        let counter = 0;
+        for (let i = fields.length - 1; getComputedStyle(fields[i]).display !== 'list-item'; i--) {
+            if(fields[i].style.display == 'block') {
+                fields[i].style.display = 'none';
+                counter++;
+            }
+            if(getComputedStyle(fields[i - 1]).display == 'list-item') btnLess.style.display = 'none';
+            if(counter == 5) return;
+        }
+    }
+    // show more fields about the repository    
+    handlerMoreRepoInfoBtn(fields, btnLess, btnMore) {
+        if(btnLess.style.display = 'none') btnLess.style.display = 'inline-block';
+        let counter = 0;
+        for(let i = 0; i < fields.length; i++) {
+            if(getComputedStyle(fields[i]).display == 'none') {
+                fields[i].style.display = 'block';
+                counter++;
+            }
+            if(i == fields.length - 1) btnMore.style.display = 'none';
+            if(counter == 5) return;
+        }
+    }
+    // show more/less fields about the repository    
+    handlerRepoInfoBtns() {
+        this.repoList.addEventListener('click', e => {
+            const moreBtnSelector = `${classes['repo__show-more']}`;
+            const lessBtnSelector = `${classes['repo__show-less']}`;
+            const isMoreBtn = e.target.classList.contains(moreBtnSelector);
+            const isLessBtn = e.target.classList.contains(lessBtnSelector);
+            if(!isMoreBtn && !isLessBtn) return;
             const parent = e.target.parentNode;
             const fields = parent.querySelectorAll('li');
-            const buttonMore = parent.querySelector(`.${classes['repo__show-more']}`); // * double declare
-            const buttonLess = parent.querySelector(`.${classes['repo__show-less']}`);
-            if(buttonLess.style.display = 'none') buttonLess.style.display = 'inline-block';
-            let counter = 0;
-            for(let i = 0; i < fields.length; i++) {
-                if(getComputedStyle(fields[i]).display == 'none') {
-                    fields[i].style.display = 'block';
-                    counter++;
-                }
-                if(i == fields.length - 1) buttonMore.style.display = 'none';
-                if(counter == 5) return;
-            }
+            if(isMoreBtn) {
+                const buttonMore = e.target;
+                const buttonLess = parent.querySelector('.' + lessBtnSelector);
+                this.handlerMoreRepoInfoBtn(fields, buttonLess, buttonMore);
+            } else {
+                const buttonLess = e.target;
+                const buttonMore = parent.querySelector('.' + moreBtnSelector);
+                this.handlerLessRepoInfoBtn(fields, buttonLess, buttonMore);
+            }  
         });
     }
-    showLess() {
-        document.querySelector(`.${classes.repo__info}`).addEventListener('click', (e) => {
-            if(!e.target.classList.contains(`${classes['repo__show-less']}`)) return;
-            const parent = e.target.parentNode;
-            const fields = parent.querySelectorAll('li');
-            const buttonMore = parent.querySelector(`.${classes['repo__show-more']}`); // * double declare
-            const buttonLess = parent.querySelector(`.${classes['repo__show-less']}`);
-            let counter = 0;
-            
-            if(buttonMore.style.display = 'none') buttonMore.style.display = 'inline-block';
-
-            for (let i = fields.length - 1; getComputedStyle(fields[i]).display !== 'list-item'; i--) {
-                if(fields[i].style.display == 'block') {
-                    fields[i].style.display = 'none';
-                    counter++;
-                }
-                if(getComputedStyle(fields[i - 1]).display == 'list-item') buttonLess.style.display = 'none';
-                if(counter == 5) return;
-            }
-        });
+    handlerRepoBtns() {
+        this.handlerRepoInfoBtns();
+        this.handlerRepoMoreBtn();
     }
 }
 export default new Repo();

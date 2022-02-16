@@ -17,7 +17,7 @@ import 'tuicss';
 class Users {
     totalLoadedUsers = 0;
     currentDataPage = 1; // * validation 
-    isLoadMore = false;
+    isLoadMore = false;  // * 
     // usersList;  // * Does it need here?
     urlUsers = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_USERS; // * ? one variable
     // currentRequestOptions = API_URL_USERS_OPTIONS;

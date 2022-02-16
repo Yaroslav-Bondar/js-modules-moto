@@ -5,7 +5,7 @@
 //     // });
 // }
 import * as apiUrlIdentifier from '../../constants/api/apiUrlIdentifier';
-// get request part of url
+// get request part of url from serialized object
 function getApiUrlOptions(formData) {
     let qualifiers = '', parameters = '';
     
@@ -40,7 +40,7 @@ function getApiUrlOptions(formData) {
     //         });
     //     }
     // }
-    console.log(qualifiers.slice(0, qualifiers.length - 1) + parameters + '&page=1&per_page=10');
+    // console.log(qualifiers.slice(0, qualifiers.length - 1) + parameters + '&page=1&per_page=10');
     return qualifiers.slice(0, qualifiers.length - 1) + parameters + '&page=1&per_page=10'; //* add parameters constants 
 }
 export {getApiUrlOptions as default};
