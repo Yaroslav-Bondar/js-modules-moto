@@ -21,4 +21,4 @@ export const API_URL_REPO_DATA = {
     // [API_URL_PAGE_PARAMETER]: `${API_URL_START_PAGE_VALUE}`,
     // [API_URL_PER_PAGE_PARAMETER]: `${API_URL_PER_PAGE_VALUE}`,
 }
-console.log(API_URL_REPO_DATA);
+// console.log(API_URL_REPO_DATA);

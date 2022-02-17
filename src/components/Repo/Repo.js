@@ -1,11 +1,13 @@
 import {getDataApi} from '../../utils';
 import classes from './Repo.css';
 import dataWorker from '../../utils';
-import {API_URL, API_URL_REPO, API_URL_SEARCH, API_URL_PAGE_REGEXP} from '../../constants/api';
+import { API_URL_PAGE_REGEXP } from '../../constants/api/apiUrlRegExp';
+
 import {API_URL_SINGLE_QUALIFIER_REGEXP, API_URL_PARAMETER_REGEXP} from '../../constants/api/apiUrlIdentifier';
 import {API_URL_USER_QUALIFIER, API_URL_LANGUAGE_QUALIFIER} from '../../constants/api/apiUrlQualifier';
 import {API_URL_REPO_DATA} from '../../constants/api/apiUrlValue';
 import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
+import {API_URL_REPO_BASE} from '../../constants/api/apiUrl';
 import {Err} from '../Error';
 
 class Repo {
@@ -13,20 +15,18 @@ class Repo {
     apiUrlRepoData = API_URL_REPO_DATA; 
     async render(login) {
         if(login) {
-            this.currentDataPage = 1; 
+            this.dataPage = 1; 
             this.apiUrlRepoData[API_URL_USER_QUALIFIER] = login; // adding user login value to "serialized" object
-            this.apiUrlRepoOptions = getApiUrlOptions(this.apiUrlRepoData); 
+            this.apiUrlRequest = getApiUrlOptions(this.apiUrlRepoData); // get api query string from serialization object
+
         }
         else {
-            this.currentDataPage++;
-            this.apiUrlRepoOptions = this.apiUrlRepoOptions.replace(API_URL_PAGE_REGEXP, (...match) => {
-                return match[1] + this.currentDataPage;  // *
+            this.dataPage++;
+            this.apiUrlRequest = this.apiUrlRequest.replace(API_URL_PAGE_REGEXP, (...match) => {
+                return match[1] + this.dataPage; 
             });
         }
-        // get api query string from serialization object
-        const apiUrlRepo = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_REPO + '?q=' + this.apiUrlRepoOptions;
-        // console.log(apiUrlRepo);
-        const data = await getDataApi.getData(apiUrlRepo);
+        const data = await getDataApi.getData(API_URL_REPO_BASE + this.apiUrlRequest);
         data instanceof Error ? Err.render(data, repo) : this.renderRepo(data);
     }
     renderRepo(data) {
@@ -71,7 +71,6 @@ class Repo {
                 fieldHtml = '';
             });
             this.repoList.insertAdjacentHTML('beforeend', reposHtml);
-            // this.handlerRepoBtns();
             this.handlerRepoInfoBtns();
         } else {
             this.toggleStateRepoMoreBtn(false);  // hide loadMoreRepoBtn
