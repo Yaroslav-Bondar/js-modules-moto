@@ -25,7 +25,7 @@ class Users {
             <button type="button" class="users__more-button" style="display=none;">Load more</button>
         </div>`;
         ROOT_INDEX.insertAdjacentHTML('beforeend', htmlSkeleton);
-        this.init();
+        this._init();
     }
     urlUsers = API_URL + '/' + API_URL_SEARCH + '/' + API_URL_USERS; // * ? one variable
     currentRequestOptions = '?q=';
@@ -67,19 +67,20 @@ class Users {
         else {
             this.usersList.innerHTML = '';
             this.loadedUsersCounter = 0;
-            this.toggleStateLoadMoreBtn(data.total_count);
             this.usersAmountItem.textContent = data.total_count;
+            this.toggleStateLoadMoreBtn(data.total_count);
         }
     }
     // show/hide load more button
     toggleStateLoadMoreBtn(state) {
         this.usersMoreButton.style.display = state ? 'block' : 'none';
     }
-    init() {
+    _init() {
         this.usersList = ROOT_INDEX.querySelector('.users__list');
-        this.handlerLoadMoreBtn();
         this.usersAmountItem = document.querySelector('.users__amount-item');
         this.usersMoreButton = document.querySelector('.users__more-button');
+        this.handlerLoadMoreBtn();
+        this.handlerUserCard();
     }
     async render(formData) {
         if(formData) {  // click form button
@@ -106,34 +107,32 @@ class Users {
         }
         else {
             this.renderUsers(data, this.isLoadMore);
-            this.handlerUserCard();
         }
     }
     handlerLoadMoreBtn() {
-        document.querySelector('.users__more-button').addEventListener('click', () => {
+        this.usersMoreButton.addEventListener('click', () => {
             this.render();
         });
     }
     handlerUserCard() {
-        document.querySelectorAll(`.${classes.users__item}`).forEach(el => {  // * event delegation
-            el.addEventListener('click', async () => {
-                // * onclick on button close modal change on constant
-                ROOT_MODAL.insertAdjacentHTML('beforeend',          
-                    `<div class="wrapper__modal">
-                        <div class="container__modal">
-                            <div id="user"></div>
-                            <div id="repo"></div>
-                        </div>
-                        <button onclick="modal.innerHTML = ''; body.style.overflow = ''" class = "${classes['user__close']}">
-                            [x]
-                        </button>
-                    </div>`);
-                Spinner.render(document.querySelector('.container__modal')); // *
-                await User.render(el.getAttribute('data-user-login'));
-                await Repo.render(el.getAttribute('data-user-login'));
-                Spinner.handleClear(document.querySelector('.container__modal'));  // *
-                BODY.style.overflow = 'hidden';
-            });
+        this.usersList.addEventListener('click', async e => {
+            const userCard = e.target.closest(`.${classes.users__item}`); 
+            if(!userCard) return;
+            ROOT_MODAL.insertAdjacentHTML('beforeend',          
+            `<div class="wrapper__modal">
+                <div class="container__modal">
+                    <div id="user"></div>
+                    <div id="repo"></div>
+                </div>
+                <button onclick="modal.innerHTML = ''; body.style.overflow = ''" class = "${classes['user__close']}">
+                    [x]
+                </button>
+            </div>`);
+            Spinner.render(document.querySelector('.container__modal')); // *
+            await User.render(userCard.getAttribute('data-user-login'));
+            await Repo.render(userCard.getAttribute('data-user-login'));
+            Spinner.handleClear(document.querySelector('.container__modal'));  // *
+            BODY.style.overflow = 'hidden';
         });
     }
 };

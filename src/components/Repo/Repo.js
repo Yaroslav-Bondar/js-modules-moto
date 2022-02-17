@@ -33,6 +33,9 @@ class Repo {
         // creating containers for display repo data
         if(!document.querySelector(`.${classes.repo__list}`)) {
             repo.innerHTML = `<h2 class="${classes.repo__title}">User repository</h2>
+                <div class="${classes['repo__total-count']}">total_count: 
+                    <span class="${classes['repo__total-count-item']}"></span>
+                </div>
                 <div class="${classes.repo__list}">
                 </div>
                 <button class="${classes['repo__download-more-btn']}">Download Repo More</button>`; 
@@ -41,6 +44,9 @@ class Repo {
         if(data.items.length) {
             // increase counter loaded repositories
             this.loadedRepoCounter += data.items.length;
+            // update the display of the total number of the downloaded repo
+            if(data.total_count != this.repoTotalCountItem.textContent)
+                this.repoTotalCountItem.textContent = data.total_count;
             if(data.total_count === this.loadedRepoCounter){
                 this.toggleStateRepoMoreBtn(false);
                 this.loadedRepoCounter = 0
@@ -69,12 +75,14 @@ class Repo {
             this.handlerRepoInfoBtns();
         } else {
             this.toggleStateRepoMoreBtn(false);  // hide loadMoreRepoBtn
-            this.loadedRepoCounter = 0        
+            this.loadedRepoCounter = 0 
+            this.repoTotalCountItem.textContent = data.total_count;        
         } 
     }
     init() {
         this.repoMoreBtn = document.querySelector(`.${classes['repo__download-more-btn']}`);
         this.repoList = document.querySelector(`.${classes.repo__list}`);
+        this.repoTotalCountItem = document.querySelector(`.${classes['repo__total-count-item']}`);
         this.handlerRepoMoreBtn();
     }
     // show/hide load more button
@@ -133,9 +141,5 @@ class Repo {
             }  
         });
     }
-    // handlerRepoBtns() {
-        // this.handlerRepoInfoBtns();
-        // this.handlerRepoMoreBtn();
-    // }
 }
 export default new Repo();
