@@ -6,8 +6,8 @@ import App from './components/App';
 import Form from './components/Form';
 
 (async () => {
-    Form.render();
-    Form.init();
+    // Form.render();
+    // Form.init();
     Spinner.render(ROOT_INDEX, 'spinner__users');
     await App.render(Form.getDataForm());
     // App.init();
