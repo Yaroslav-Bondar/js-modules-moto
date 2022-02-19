@@ -15,5 +15,7 @@ export const usersHtmlSkeleton =`
         <div class="users__total-count">total_count: <span class="users__total-count-item"></span></div>  
         <ul class="users__list">
         </ul>
-        <button type="button" class="users__more-button" style="display=none;">Load more</button>
+        <div class="users__more-btn-container">
+            <button type="button" class="users__more-btn" style="display=none;">Load more</button>
+        </div>
     </div>`;    

@@ -9,7 +9,6 @@ class Spinner {
     }
     render(parent, className) {
         let html = `
-            <!-- Indeterminate --> 
             <div class="tui-progress-bar ${className}">
                 <span class="tui-indeterminate"></span>
             </div>`;

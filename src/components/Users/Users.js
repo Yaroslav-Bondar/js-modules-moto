@@ -6,7 +6,6 @@ import User from '../User';
 import Repo from '../Repo';
 import Spinner from '../Spinner';
 import {Err} from '../Error';
-// import * as apiUrlElementName from '../../constants/api/apiUrlElementName';
 import { API_URL_PAGE_REGEXP } from '../../constants/api/apiUrlRegExp';
 import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
 import {modalHtmlSkeleton, usersHtmlSkeleton} from './UsersHtml.js';
@@ -31,8 +30,6 @@ class Users {
                 return match[1] + this.dataPage;  // *
             });
         }
-        // console.log(API_URL_USERS_BASE, this.apiUrlRequest);
-        
         const data = await getDataApi.getData(API_URL_USERS_BASE + this.apiUrlRequest);
 
         if (data instanceof Error) {
@@ -88,16 +85,15 @@ class Users {
     _init() {
         this.usersList = ROOT_INDEX.querySelector('.users__list');
         this.usersTotalCount = document.querySelector('.users__total-count-item');
-        this.usersMoreButton = document.querySelector('.users__more-button');
+        this.usersMoreBtn = document.querySelector('.users__more-btn');
         this.handlerLoadMoreBtn();
         this.handlerUserCard();
     }
     toggleStateLoadMoreBtn(state) {
-        this.usersMoreButton.style.display = state ? 'block' : 'none';
+        this.usersMoreBtn.style.display = state ? 'block' : 'none';
     }
-
     handlerLoadMoreBtn() {
-        this.usersMoreButton.addEventListener('click', () => {
+        this.usersMoreBtn.addEventListener('click', () => {
             this.render();
         });
     }
