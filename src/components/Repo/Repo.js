@@ -1,5 +1,5 @@
 import {getDataApi} from '../../utils';
-import classes from './Repo.css';
+import styles from './Repo.css';
 import dataWorker from '../../utils';
 import { API_URL_PAGE_REGEXP } from '../../constants/api/apiUrlRegExp';
 
@@ -9,6 +9,7 @@ import {API_URL_REPO_DATA} from '../../constants/api/apiUrlValue';
 import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
 import {API_URL_REPO_BASE} from '../../constants/api/apiUrl';
 import {Err} from '../Error';
+import {repoHtmlSkeleton, repoHtmlInfoBtns} from './RepoHtml';
 
 class Repo {
     loadedRepoCounter = 0;  
@@ -31,14 +32,8 @@ class Repo {
     }
     renderRepo(data) {
         // creating containers for display repo data
-        if(!document.querySelector(`.${classes.repo__list}`)) {
-            repo.innerHTML = `<h2 class="${classes.repo__title}">User repository</h2>
-                <div class="${classes['repo__total-count']}">total_count: 
-                    <span class="${classes['repo__total-count-item']}"></span>
-                </div>
-                <div class="${classes.repo__list}">
-                </div>
-                <button class="${classes['repo__download-more-btn']}">Download Repo More</button>`; 
+        if(!document.querySelector(`.${styles.repo__list}`)) {
+            repo.insertAdjacentHTML('beforeend', repoHtmlSkeleton);
             this.init();
         }
         if(data.items.length) {
@@ -52,8 +47,6 @@ class Repo {
                 this.loadedRepoCounter = 0
             }
             let fieldHtml = '', reposHtml = '';
-            const buttonsHtml = `<button class="show__more ${classes['repo__show-more']}">Show more</button>
-                                    <button class="show__less ${classes['repo__show-less']}">Show less</button>`;
             // keys to be displayed first
             const topKeys = ['name', 'full_name', 'html_url', 'clone_url', 'git_url', 'stargazers_count',
                             'language', 'id', 'description', 'created_at', 'updated_at', 'pushed_at'];
@@ -64,10 +57,10 @@ class Repo {
                 const dataCorrected = dataWorker.correctData(repo);
                 
                 dataWorker.sortKey(dataCorrected, topKeys, notEnteredKey).forEach(key => {
-                    fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName, classes.repo__field,
-                                 classes.repo__key, classes.repo__value);
+                    fieldHtml += dataWorker.renderFields(dataCorrected, key, keysName, styles.repo__field,
+                                 styles.repo__key, styles.repo__value);
                 });
-                reposHtml += `<ul class="${classes.repo__fields}">${fieldHtml + buttonsHtml}</ul>`;
+                reposHtml += `<ul class="${styles.repo__fields}">${fieldHtml + repoHtmlInfoBtns}</ul>`;
                 fieldHtml = '';
             });
             this.repoList.insertAdjacentHTML('beforeend', reposHtml);
@@ -79,9 +72,9 @@ class Repo {
         } 
     }
     init() {
-        this.repoMoreBtn = document.querySelector(`.${classes['repo__download-more-btn']}`);
-        this.repoList = document.querySelector(`.${classes.repo__list}`);
-        this.repoTotalCountItem = document.querySelector(`.${classes['repo__total-count-item']}`);
+        this.repoMoreBtn = document.querySelector(`.${styles['repo__download-more-btn']}`);
+        this.repoList = document.querySelector(`.${styles.repo__list}`);
+        this.repoTotalCountItem = document.querySelector(`.${styles['repo__total-count-item']}`);
         this.handlerRepoMoreBtn();
     }
     // show/hide load more button
@@ -122,8 +115,8 @@ class Repo {
     // show more/less fields about the repository    
     handlerRepoInfoBtns() {
         this.repoList.addEventListener('click', e => {
-            const moreBtnSelector = `${classes['repo__show-more']}`;
-            const lessBtnSelector = `${classes['repo__show-less']}`;
+            const moreBtnSelector = `${styles['repo__show-more']}`;
+            const lessBtnSelector = `${styles['repo__show-less']}`;
             const isMoreBtn = e.target.classList.contains(moreBtnSelector);
             const isLessBtn = e.target.classList.contains(lessBtnSelector);
             if(!isMoreBtn && !isLessBtn) return;

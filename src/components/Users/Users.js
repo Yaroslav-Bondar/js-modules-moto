@@ -11,19 +11,19 @@ import * as apiUrlElementName from '../../constants/api/apiUrlElementName';
 import * as apiUrlIdentifier from '../../constants/api/apiUrlIdentifier';
 import { API_URL_PAGE_REGEXP } from '../../constants/api/apiUrlRegExp';
 import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
-
+import {modalHtmlSkeleton, usersHtmlSkeleton} from './UsersHtml.js';
 import 'tuicss';
 class Users {
     constructor() {
         this.loadedUsersCounter = 0;
-        let htmlSkeleton =`
-        <div class="users__container">
-            <div class="users__total-count">total_count: <span class="users__total-count-item"></span></div>  
-            <ul class="users__list">
-            </ul>
-            <button type="button" class="users__more-button" style="display=none;">Load more</button>
-        </div>`;
-        ROOT_INDEX.insertAdjacentHTML('beforeend', htmlSkeleton);
+        // let htmlSkeleton =`
+        // <div class="users__container">
+        //     <div class="users__total-count">total_count: <span class="users__total-count-item"></span></div>  
+        //     <ul class="users__list">
+        //     </ul>
+        //     <button type="button" class="users__more-button" style="display=none;">Load more</button>
+        // </div>`;
+        ROOT_INDEX.insertAdjacentHTML('beforeend', usersHtmlSkeleton);
         this._init();
     }
     async render(formData) {
@@ -114,16 +114,8 @@ class Users {
         this.usersList.addEventListener('click', async e => {
             const userCard = e.target.closest(`.${classes.users__item}`); 
             if(!userCard) return;
-            ROOT_MODAL.insertAdjacentHTML('beforeend',          
-            `<div class="wrapper__modal">
-                <div class="container__modal">
-                    <div id="user"></div>
-                    <div id="repo"></div>
-                </div>
-                <button onclick="modal.innerHTML = ''; body.style.overflow = ''" class = "${classes['user__close']}">
-                    [x]
-                </button>
-            </div>`);
+            // added html containers for display data
+            ROOT_MODAL.insertAdjacentHTML('beforeend', modalHtmlSkeleton);
             Spinner.render(document.querySelector('.container__modal')); // *
             await User.render(userCard.getAttribute('data-user-login'));
             await Repo.render(userCard.getAttribute('data-user-login'));
