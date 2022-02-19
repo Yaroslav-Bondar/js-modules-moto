@@ -1,9 +1,12 @@
 
 
-import {API_URL_DOUBLE_GROUP_IDENTIFIER, API_URL_VALUE_IDENTIFIER, API_URL_KEY_IDENTIFIER, API_URL_SIMPLE_GROUP_IDENTIFIER} from '../../constants/api/apiUrlIdentifier';
+import {API_URL_DOUBLE_GROUP_IDENTIFIER, API_URL_VALUE_IDENTIFIER, 
+        API_URL_KEY_IDENTIFIER, 
+        API_URL_SIMPLE_GROUP_IDENTIFIER} from '../../constants/api/apiUrlIdentifier';
 import * as API_URL_QUALIFIER from '../../constants/api/apiUrlQualifier';
 import {API_URL_SORT_PARAMETER, API_URL_ORDER_PARAMETER} from '../../constants/api/apiUrlParameter';
-import {API_URL_ASC_VALUE, API_URL_DESC_VALUE, API_URL_FOLLOWERS_VALUE, API_URL_REPOSITORIES_VALUE} from '../../constants/api/apiUrlValue';
+import {API_URL_ASC_VALUE, API_URL_DESC_VALUE, API_URL_FOLLOWERS_VALUE, 
+        API_URL_REPOSITORIES_VALUE} from '../../constants/api/apiUrlValue';
 
 export const htmlForm = `
 <form name="users" role="search">

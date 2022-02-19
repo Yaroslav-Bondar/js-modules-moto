@@ -2,8 +2,7 @@ import * as apiUrlIdentifier from '../constants/api/apiUrlIdentifier';
 
 export function formDataSerializer(form) {
     let formData = {};
-    for(let i = 0; i < form.elements.length; i++) { // * check for epmty field
-        // rules for groups
+    for(let i = 0; i < form.elements.length; i++) { 
         // rule for API_URL_SIMPLE_GROUP_IDENTIFIER API_URL_GROUP_IDENTIFIER
         if(form.elements[i].name.includes(apiUrlIdentifier.API_URL_SIMPLE_GROUP_IDENTIFIER)) {
             for(let j = 0; j < form.elements[i].elements.length; j++) {

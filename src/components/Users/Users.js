@@ -1,5 +1,4 @@
 import { API_URL_USERS_BASE } from '../../constants/api/apiUrl';
-import * as apiUrlSign from '../../constants/api/apiUrlSign';
 import {getDataApi} from '../../utils';
 import classes from './Users.css';
 import {ROOT_INDEX, ROOT_MODAL, BODY} from '../../constants/root';
@@ -7,8 +6,7 @@ import User from '../User';
 import Repo from '../Repo';
 import Spinner from '../Spinner';
 import {Err} from '../Error';
-import * as apiUrlElementName from '../../constants/api/apiUrlElementName';
-import * as apiUrlIdentifier from '../../constants/api/apiUrlIdentifier';
+// import * as apiUrlElementName from '../../constants/api/apiUrlElementName';
 import { API_URL_PAGE_REGEXP } from '../../constants/api/apiUrlRegExp';
 import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
 import {modalHtmlSkeleton, usersHtmlSkeleton} from './UsersHtml.js';
@@ -16,13 +14,6 @@ import 'tuicss';
 class Users {
     constructor() {
         this.loadedUsersCounter = 0;
-        // let htmlSkeleton =`
-        // <div class="users__container">
-        //     <div class="users__total-count">total_count: <span class="users__total-count-item"></span></div>  
-        //     <ul class="users__list">
-        //     </ul>
-        //     <button type="button" class="users__more-button" style="display=none;">Load more</button>
-        // </div>`;
         ROOT_INDEX.insertAdjacentHTML('beforeend', usersHtmlSkeleton);
         this._init();
     }

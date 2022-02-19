@@ -2,9 +2,7 @@ import {getDataApi} from '../../utils';
 import styles from './Repo.css';
 import dataWorker from '../../utils';
 import { API_URL_PAGE_REGEXP } from '../../constants/api/apiUrlRegExp';
-
-import {API_URL_SINGLE_QUALIFIER_REGEXP, API_URL_PARAMETER_REGEXP} from '../../constants/api/apiUrlIdentifier';
-import {API_URL_USER_QUALIFIER, API_URL_LANGUAGE_QUALIFIER} from '../../constants/api/apiUrlQualifier';
+import {API_URL_USER_QUALIFIER} from '../../constants/api/apiUrlQualifier';
 import {API_URL_REPO_DATA} from '../../constants/api/apiUrlValue';
 import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
 import {API_URL_REPO_BASE} from '../../constants/api/apiUrl';
