@@ -16,6 +16,6 @@ export const usersHtmlSkeleton =`
         <ul class="users__list">
         </ul>
         <div class="users__more-btn-container">
-            <button type="button" class="users__more-btn" style="display=none;">Load more</button>
+            <button type="button" class=${styles['users__more-btn']} style="display=none;">Load more</button>
         </div>
     </div>`;    

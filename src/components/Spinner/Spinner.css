@@ -16,3 +16,20 @@
     background-color: cadetblue;
     /* background-color: rgba(0, 0, 0, .5); */
 }
+/* :global() */
+.spinner__users {
+    /* overflow: hidden; */
+    /* height: 100px; */
+    position: absolute;
+    /* z-index: 0; */
+    /* height: 20px; */
+    /* width: 200px; */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.spinner__users-load-more {
+    height: 10px;
+    width: 100px;
+    border-radius: 10px;
+}

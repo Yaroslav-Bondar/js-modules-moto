@@ -1,5 +1,5 @@
-import classes from './Spinner.css';
 import 'tuicss';
+import styles from './Spinner.css';
 class Spinner {
     handleClear() {
         // checking if other components, for example (Error component ),
@@ -9,7 +9,7 @@ class Spinner {
     }
     render(parent, className) {
         let html = `
-            <div class="tui-progress-bar ${className}">
+            <div class="tui-progress-bar ${styles[className]}">
                 <span class="tui-indeterminate"></span>
             </div>`;
         parent.insertAdjacentHTML('beforeend', html);

@@ -29,5 +29,8 @@
     padding: var(--spacing-small);
     text-align: center;
 }
+.users__more-btn {
+    margin: 50px auto;
+}
 /* .users__img {
 } */

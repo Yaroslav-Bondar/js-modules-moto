@@ -30,8 +30,16 @@ class Users {
                 return match[1] + this.dataPage;  // *
             });
         }
+        // render spiner until data is loaded
+        if(!this.isLoadMore) {
+            Spinner.render(ROOT_INDEX, 'spinner__users');
+        } else {
+            Spinner.render(this.usersMoreBtn, 'spinner__users-load-more');
+        }
         const data = await getDataApi.getData(API_URL_USERS_BASE + this.apiUrlRequest);
-
+        // data is loaded - stop spinner
+        Spinner.handleClear();
+        // check data for error
         if (data instanceof Error) {
             Err.render(data, ROOT_INDEX, 'error__fullscreen', '');
         }
@@ -67,7 +75,7 @@ class Users {
             this.loadedUsersCounter += data.items.length;
             // show/hide load more button
             if(data.total_count !== this.loadedUsersCounter) {
-                this.toggleStateLoadMoreBtn(true); // *
+                this.toggleStateLoadMoreBtn(true); 
             }
             else {
                 this.toggleStateLoadMoreBtn(false);
@@ -85,7 +93,7 @@ class Users {
     _init() {
         this.usersList = ROOT_INDEX.querySelector('.users__list');
         this.usersTotalCount = document.querySelector('.users__total-count-item');
-        this.usersMoreBtn = document.querySelector('.users__more-btn');
+        this.usersMoreBtn = document.querySelector(`.${classes['users__more-btn']}`);
         this.handlerLoadMoreBtn();
         this.handlerUserCard();
     }
