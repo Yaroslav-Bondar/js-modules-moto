@@ -1,6 +1,6 @@
 import {ROOT_INDEX} from '../../constants/root';
 import Users from '../Users';
-import Spinner from '../Spinner';
+// import Spinner from '../Spinner';
 import {htmlForm} from './FormHtml'
 import {formDataSerializer} from '../../utils/formDataSerializer';
 
@@ -16,9 +16,9 @@ class Form {
     handlerFormSubmit() {
         this.formUsers.addEventListener('submit', async (e) => {
             e.preventDefault();
-            Spinner.render(ROOT_INDEX, 'spinner__users');
+            // Spinner.render(ROOT_INDEX, 'spinner__users');
             await Users.render(this.getDataForm());
-            Spinner.handleClear();
+            // Spinner.handleClear();
         });
     }
     getDataForm() {

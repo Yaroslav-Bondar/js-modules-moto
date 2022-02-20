@@ -111,10 +111,10 @@ class Users {
             if(!userCard) return;
             // added html containers for display data
             ROOT_MODAL.insertAdjacentHTML('beforeend', modalHtmlSkeleton);
-            Spinner.render(document.querySelector('.container__modal')); // *
+            // Spinner.render(document.querySelector('.container__modal')); // *
             await User.render(userCard.getAttribute('data-user-login'));
             await Repo.render(userCard.getAttribute('data-user-login'));
-            Spinner.handleClear(document.querySelector('.container__modal'));  // *
+            // Spinner.handleClear(document.querySelector('.container__modal'));  // *
             BODY.style.overflow = 'hidden';
         });
     }
