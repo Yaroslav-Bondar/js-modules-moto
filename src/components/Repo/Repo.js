@@ -1,13 +1,15 @@
-import {getDataApi} from '../../utils';
-import styles from './Repo.css';
+import {Err} from '../Error';
+import Spinner from '../Spinner';
 import dataWorker from '../../utils';
-import { API_URL_PAGE_REGEXP } from '../../constants/api/apiUrlRegExp';
+import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
+import {getDataApi} from '../../utils';
+import {API_URL_REPO_BASE} from '../../constants/api/apiUrl';
 import {API_URL_USER_QUALIFIER} from '../../constants/api/apiUrlQualifier';
 import {API_URL_REPO_DATA} from '../../constants/api/apiUrlValue';
-import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
-import {API_URL_REPO_BASE} from '../../constants/api/apiUrl';
-import {Err} from '../Error';
+import { API_URL_PAGE_REGEXP } from '../../constants/api/apiUrlRegExp';
+import {REPO_COMPONENT_ID, REPO_COMPONENT_LOAD_MORE_ID} from '../../constants/root';
 import {repoHtmlSkeleton, repoHtmlInfoBtns} from './RepoHtml';
+import styles from './Repo.css';
 
 class Repo {
     loadedRepoCounter = 0;  
@@ -25,8 +27,15 @@ class Repo {
                 return match[1] + this.dataPage; 
             });
         }
+        if(this.dataPage === 1) {
+            Spinner.render(repo, REPO_COMPONENT_ID);
+        }
+        else {
+            Spinner.render(this.repoMoreBtn, REPO_COMPONENT_LOAD_MORE_ID);
+        }
         const data = await getDataApi.getData(API_URL_REPO_BASE + this.apiUrlRequest);
         data instanceof Error ? Err.render(data, repo) : this.renderRepo(data);
+        Spinner.handleClear();
     }
     renderRepo(data) {
         // creating containers for display repo data

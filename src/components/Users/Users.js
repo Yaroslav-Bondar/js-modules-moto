@@ -1,15 +1,17 @@
-import { API_URL_USERS_BASE } from '../../constants/api/apiUrl';
-import {getDataApi} from '../../utils';
-import classes from './Users.css';
-import {ROOT_INDEX, ROOT_MODAL, BODY} from '../../constants/root';
+import 'tuicss';
 import User from '../User';
 import Repo from '../Repo';
 import Spinner from '../Spinner';
 import {Err} from '../Error';
-import { API_URL_PAGE_REGEXP } from '../../constants/api/apiUrlRegExp';
+import {getDataApi} from '../../utils';
 import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
+import {ROOT_INDEX, ROOT_MODAL, BODY} from '../../constants/root';
+import { API_URL_USERS_BASE } from '../../constants/api/apiUrl';
+import { API_URL_PAGE_REGEXP } from '../../constants/api/apiUrlRegExp';
+import {USERS_COMPONENT_ID, USERS_COMPONENT_LOAD_MORE_ID} from '../../constants/root';
 import {modalHtmlSkeleton, usersHtmlSkeleton} from './UsersHtml.js';
-import 'tuicss';
+import styles from './Users.css';
+
 class Users {
     constructor() {
         this.loadedUsersCounter = 0;
@@ -32,9 +34,9 @@ class Users {
         }
         // render spiner until data is loaded
         if(!this.isLoadMore) {
-            Spinner.render(ROOT_INDEX, 'spinner__users');
+            Spinner.render(ROOT_INDEX, USERS_COMPONENT_ID);
         } else {
-            Spinner.render(this.usersMoreBtn, 'spinner__users-load-more');
+            Spinner.render(this.usersMoreBtn, USERS_COMPONENT_LOAD_MORE_ID);
         }
         const data = await getDataApi.getData(API_URL_USERS_BASE + this.apiUrlRequest);
         // data is loaded - stop spinner
@@ -53,10 +55,10 @@ class Users {
             // preparation of html for users data 
             data.items.forEach(({id, login, avatar_url : avatarUrl}) => {
                 htmlUsers += `
-                <li class="${classes.users__item}" data-user-login='${login}'>
-                    <div class="${classes.users__name}">${login}</div>
-                    <div class="${classes.users__id}">${id}</div>
-                    <img class="${classes.users__img}" src="${avatarUrl}" alt="user_avatar"/>
+                <li class="${styles.users__item}" data-user-login='${login}'>
+                    <div class="${styles.users__name}">${login}</div>
+                    <div class="${styles.users__id}">${id}</div>
+                    <img class="${styles.users__img}" src="${avatarUrl}" alt="user_avatar"/>
                 </li>`;
             });
             if(isLoadMore) {   
@@ -93,7 +95,7 @@ class Users {
     _init() {
         this.usersList = ROOT_INDEX.querySelector('.users__list');
         this.usersTotalCount = document.querySelector('.users__total-count-item');
-        this.usersMoreBtn = document.querySelector(`.${classes['users__more-btn']}`);
+        this.usersMoreBtn = document.querySelector(`.${styles['users__more-btn']}`);
         this.handlerLoadMoreBtn();
         this.handlerUserCard();
     }
@@ -107,7 +109,7 @@ class Users {
     }
     handlerUserCard() {
         this.usersList.addEventListener('click', async e => {
-            const userCard = e.target.closest(`.${classes.users__item}`); 
+            const userCard = e.target.closest(`.${styles.users__item}`); 
             if(!userCard) return;
             // added html containers for display data
             ROOT_MODAL.insertAdjacentHTML('beforeend', modalHtmlSkeleton);

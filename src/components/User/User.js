@@ -1,10 +1,11 @@
+import Spinner from '../Spinner';
+import {Err} from '../Error';
 import {getDataApi} from '../../utils';
 import dataWorker from '../../utils/';
-import styles from './User.css';
-import {API_URL_USER_BASE} from '../../constants/api/apiUrl';
-import {Err} from '../Error';
-import Spinner from '../Spinner';
 import {userHtmlSkeleton} from './UserHtml';
+import {API_URL_USER_BASE} from '../../constants/api/apiUrl';
+import {USER_COMPONENT_ID} from '../../constants/root';
+import styles from './User.css';
 
 function User(){};
 
@@ -29,9 +30,10 @@ User.prototype.userRender = function(data) {
     user.querySelector(`.${styles['user__info']}`).insertAdjacentHTML('afterbegin', `${userInfo}`);
 }
 User.prototype.render = async function(login) {
-    Spinner.render(user, '')
+    Spinner.render(user, USER_COMPONENT_ID);
+    // Spinner.render(user, `${styles['user__spinner']}`, 'user loading...:');
     const data = await getDataApi.getData(API_URL_USER_BASE + login);
-    Spinner.handleClear();
+    // Spinner.handleClear();
     data instanceof Error ? Err.render(data, user, 'error__miniscreen', 'error user data') : this.userRender(data);
 }
 

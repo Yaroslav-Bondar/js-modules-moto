@@ -17,19 +17,66 @@
     /* background-color: rgba(0, 0, 0, .5); */
 }
 /* :global() */
-.spinner__users {
+/* .spinner__users { */
     /* overflow: hidden; */
     /* height: 100px; */
-    position: absolute;
+    /* position: absolute; */
     /* z-index: 0; */
     /* height: 20px; */
     /* width: 200px; */
+    /* top: 50%; */
+    /* left: 50%; */
+    /* transform: translate(-50%,-50%); */
+/* } */
+/* .spinner__users-load-more {
+    height: 10px;
+    width: 100px;
+    border-radius: 10px;
+} */
+.spinner__text {
+    /* position: absolute; */
+    /* left: -110%; */
+}
+
+/* styles for the User component */
+.spinner__user-container {
+    display: flex;
+    align-items: center;
+}
+.spinner__user-text {
+    margin-right: 20px;
+    color: cornflowerblue;
+}
+/* styles for the Users component */
+.spinner__users-container {
+    position: absolute;
     top: 50%;
     left: 50%;
+    display: flex;
+    align-items: center;
     transform: translate(-50%,-50%);
+}
+.spinner__users-text {
+    margin-right: 20px;
+    color: navy;
 }
 .spinner__users-load-more {
     height: 10px;
     width: 100px;
+    border-radius: 10px;
+}
+/* styles for the Repo component */
+.spinner__repo-container {
+    display: flex;
+    align-items: center;
+}
+.spinner__repo-text {
+    margin-right: 20px;
+    color: olive;
+}
+.spinner__repo-load-more {
+    height: 10px;
+    width: 100px;
+    margin: 0 auto;
     border-radius: 10px;
 }
