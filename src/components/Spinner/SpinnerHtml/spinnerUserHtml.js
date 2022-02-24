@@ -1,6 +1,3 @@
-// ${className}
-// ${styles.spinner__text}
-// ${text}
 import styles from '../Spinner.css';
 import {USER_COMPONENT_ID} from '../../../constants/root';
 

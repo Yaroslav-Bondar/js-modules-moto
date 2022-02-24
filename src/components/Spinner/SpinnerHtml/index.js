@@ -1,4 +1,5 @@
-import 'tuicss';
+// import 'tuicss';
+// import styles from '../Spinner.css';
 import {spinnerUserHtml} from './spinnerUserHtml';
 import {spinnerUsersHtml, spinnerUsersLoadMoreHtml} from './spinnerUsersHtml';
 import {spinnerRepoHtml, spinnerRepoLoadMoreHtml} from './spinnerRepoHtml';

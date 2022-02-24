@@ -15,27 +15,35 @@ class Repo {
     loadedRepoCounter = 0;  
     apiUrlRepoData = API_URL_REPO_DATA; 
     async render(login) {
-        if(login) {
+        if(login) {  
             this.dataPage = 1; 
             this.apiUrlRepoData[API_URL_USER_QUALIFIER] = login; // adding user login value to "serialized" object
             this.apiUrlRequest = getApiUrlOptions(this.apiUrlRepoData); // get api query string from serialization object
 
-        }
+        } // when click the load more button
         else {
             this.dataPage++;
             this.apiUrlRequest = this.apiUrlRequest.replace(API_URL_PAGE_REGEXP, (...match) => {
                 return match[1] + this.dataPage; 
             });
         }
+        // render spiner until data is loaded
         if(this.dataPage === 1) {
             Spinner.render(repo, REPO_COMPONENT_ID);
         }
-        else {
+        else {   // when click the load more button
             Spinner.render(this.repoMoreBtn, REPO_COMPONENT_LOAD_MORE_ID);
         }
         const data = await getDataApi.getData(API_URL_REPO_BASE + this.apiUrlRequest);
+        // data is loaded - stop spinner
+        if(this.dataPage === 1) {
+            Spinner.handleClear(REPO_COMPONENT_ID);
+        }
+        else {
+            Spinner.handleClear(REPO_COMPONENT_LOAD_MORE_ID);
+        }
+        // check data for error
         data instanceof Error ? Err.render(data, repo) : this.renderRepo(data);
-        Spinner.handleClear();
     }
     renderRepo(data) {
         // creating containers for display repo data

@@ -23,13 +23,16 @@ class Users {
             this.dataPage = 1; 
             this.isLoadMore = false;
             this.apiUrlRequest = getApiUrlOptions(formData);
+            this.usersList.innerHTML = '';  // zeroing before new data render 
+            this.usersTotalCount.textContent = 0; // zeroing before new data render
+            this.toggleStateLoadMoreBtn(false); // initial state
         }
         else { // click load more button
             this.dataPage++;
             this.isLoadMore = true;
             // set number for load page
             this.apiUrlRequest = this.apiUrlRequest.replace(API_URL_PAGE_REGEXP, (...match) => {
-                return match[1] + this.dataPage;  // *
+                return match[1] + this.dataPage;  
             });
         }
         // render spiner until data is loaded
@@ -40,7 +43,11 @@ class Users {
         }
         const data = await getDataApi.getData(API_URL_USERS_BASE + this.apiUrlRequest);
         // data is loaded - stop spinner
-        Spinner.handleClear();
+        if(!this.isLoadMore) {
+            Spinner.handleClear(USERS_COMPONENT_ID);
+        } else {
+            Spinner.handleClear(USERS_COMPONENT_LOAD_MORE_ID);
+        }
         // check data for error
         if (data instanceof Error) {
             Err.render(data, ROOT_INDEX, 'error__fullscreen', '');
@@ -67,7 +74,7 @@ class Users {
             // if click the form button
             if(!isLoadMore) { 
                 this.loadedUsersCounter = 0;
-                this.usersList.innerHTML = '';
+                // this.usersList.innerHTML = '';
                 this.usersList.insertAdjacentHTML('beforeend', htmlUsers);
                 // update the display of the total number of the downloaded users
                 if(data.total_count != this.usersTotalCount.textContent) 
@@ -108,16 +115,15 @@ class Users {
         });
     }
     handlerUserCard() {
-        this.usersList.addEventListener('click', async e => {
+        this.usersList.addEventListener('click',  e => {
             const userCard = e.target.closest(`.${styles.users__item}`); 
             if(!userCard) return;
             // added html containers for display data
             ROOT_MODAL.insertAdjacentHTML('beforeend', modalHtmlSkeleton);
-            // Spinner.render(document.querySelector('.container__modal')); // *
-            await User.render(userCard.getAttribute('data-user-login'));
-            await Repo.render(userCard.getAttribute('data-user-login'));
-            // Spinner.handleClear(document.querySelector('.container__modal'));  // *
+            User.render(userCard.getAttribute('data-user-login'));
+            Repo.render(userCard.getAttribute('data-user-login'));
             BODY.style.overflow = 'hidden';
+            // * BODY.style.overflow when error ?
         });
     }
 };

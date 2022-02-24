@@ -1,8 +1,8 @@
-import {ROOT_INDEX} from '../../constants/root';
 import Users from '../Users';
 // import Spinner from '../Spinner';
-import {htmlForm} from './FormHtml'
 import {formDataSerializer} from '../../utils/formDataSerializer';
+import {ROOT_INDEX} from '../../constants/root';
+import {htmlForm} from './FormHtml'
 
 class Form {
     constructor() {
