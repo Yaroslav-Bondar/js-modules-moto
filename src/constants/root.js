@@ -10,4 +10,4 @@ export const USERS_COMPONENT_LOAD_MORE_ID = 's_users_load_more';
 export const REPO_COMPONENT_ID = 's_repo';
 export const REPO_COMPONENT_LOAD_MORE_ID = 's_repo_load_more';
 
-
+export const ERROR_FULL_SCREEN_ID = 'e_full_screen';

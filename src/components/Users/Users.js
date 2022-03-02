@@ -6,9 +6,11 @@ import {Err} from '../Error';
 import {getDataApi} from '../../utils';
 import getApiUrlOptions from '../../utils/apiUrlUtils/getApiUrlOptions';
 import {ROOT_INDEX, ROOT_MODAL, BODY} from '../../constants/root';
+import {USERS_COMPONENT_ID, 
+        USERS_COMPONENT_LOAD_MORE_ID, 
+        ERROR_FULL_SCREEN_ID} from '../../constants/root';
 import { API_URL_USERS_BASE } from '../../constants/api/apiUrl';
 import { API_URL_PAGE_REGEXP } from '../../constants/api/apiUrlRegExp';
-import {USERS_COMPONENT_ID, USERS_COMPONENT_LOAD_MORE_ID} from '../../constants/root';
 import {modalHtmlSkeleton, usersHtmlSkeleton} from './UsersHtml.js';
 import styles from './Users.css';
 
@@ -50,7 +52,7 @@ class Users {
         }
         // check data for error
         if (data instanceof Error) {
-            Err.render(data, ROOT_INDEX, 'error__fullscreen', '');
+            Err.render(ROOT_INDEX, ERROR_FULL_SCREEN_ID, data);
         }
         else {
             this.renderUsers(data, this.isLoadMore);
@@ -92,7 +94,7 @@ class Users {
             }
         }
         else {
-            this.usersList.innerHTML = '';
+            // this.usersList.innerHTML = '';
             this.loadedUsersCounter = 0;
             this.usersTotalCount.textContent = data.total_count;
             this.toggleStateLoadMoreBtn(data.total_count);

@@ -1,0 +1,12 @@
+.error__fullscreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    background-color: burlywood;
+}
+.error__message {
+    
+}

@@ -33,8 +33,8 @@ User.prototype.render = async function(login) {
     Spinner.render(user, USER_COMPONENT_ID);
     // Spinner.render(user, `${styles['user__spinner']}`, 'user loading...:');
     const data = await getDataApi.getData(API_URL_USER_BASE + login);
-    // Spinner.handleClear();
-    data instanceof Error ? Err.render(data, user, 'error__miniscreen', 'error user data') : this.userRender(data);
+    Spinner.handleClear(USER_COMPONENT_ID);
+    // data instanceof Error ? Err.render(data, user, 'error__miniscreen', 'error user data') : this.userRender(data);
 }
 
 export default new User();
