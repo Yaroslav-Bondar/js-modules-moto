@@ -11,3 +11,7 @@ export const REPO_COMPONENT_ID = 's_repo';
 export const REPO_COMPONENT_LOAD_MORE_ID = 's_repo_load_more';
 
 export const ERROR_FULL_SCREEN_ID = 'e_full_screen';
+export const ERROR_LOCAL_ID = 'e_local';
+
+export const USER_ERROR_MESSAGE = 'Failed to load user data'
+export const USERS_ERROR_MESSAGE = 'Failed to load users data'

@@ -4,7 +4,7 @@ import {getDataApi} from '../../utils';
 import dataWorker from '../../utils/';
 import {userHtmlSkeleton} from './UserHtml';
 import {API_URL_USER_BASE} from '../../constants/api/apiUrl';
-import {USER_COMPONENT_ID} from '../../constants/root';
+import {USER_COMPONENT_ID, USER_ERROR_MESSAGE, ERROR_LOCAL_ID} from '../../constants/root';
 import styles from './User.css';
 
 function User(){};
@@ -34,7 +34,7 @@ User.prototype.render = async function(login) {
     // Spinner.render(user, `${styles['user__spinner']}`, 'user loading...:');
     const data = await getDataApi.getData(API_URL_USER_BASE + login);
     Spinner.handleClear(USER_COMPONENT_ID);
-    // data instanceof Error ? Err.render(data, user, 'error__miniscreen', 'error user data') : this.userRender(data);
+    data instanceof Error ? Err.render(user, ERROR_LOCAL_ID, data, USER_ERROR_MESSAGE) : this.userRender(data);
 }
 
 export default new User();

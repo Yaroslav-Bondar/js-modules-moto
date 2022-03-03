@@ -4,7 +4,7 @@ import spinnerHtml from './SpinnerHtml';
 
 class Spinner {
     handleClear(componentId) {
-        // checking if other components, for example (Error component ),
+        // checking if other components, for example (Error component),
         // have not overwritten the contents of the container
         document.querySelector(`#${componentId}`).remove();
         // if(document.querySelector(`.tui-progress-bar`))

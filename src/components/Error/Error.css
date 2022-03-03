@@ -7,6 +7,12 @@
     width: 100%;
     background-color: burlywood;
 }
-.error__message {
-    
+.error__fullscreen-message {
+
+}
+.error__local {
+
+}
+.error__local-message {
+
 }
